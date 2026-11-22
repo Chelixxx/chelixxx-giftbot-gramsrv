@@ -18,15 +18,25 @@ node "$SCRIPT_DIR/patch-voltra.mjs" "$CLIENT_DIR"
 export VITE_TELESRV_DC_HOST="${VITE_TELESRV_DC_HOST:-voltra-server-production.up.railway.app}"
 export VITE_TELESRV_DC_PORT="${VITE_TELESRV_DC_PORT:-443}"
 export VITE_TELESRV_WS_PATH="${VITE_TELESRV_WS_PATH:-/apiws}"
-export VOLTRA_WEB_HOST="${VOLTRA_WEB_HOST:-chelixxx-giftbot-gramsrv.pages.dev}"
+export VOLTRA_WEB_HOST="${VOLTRA_WEB_HOST:-voltra.layero.app}"
 
 cd "$CLIENT_DIR"
 if ! command -v pnpm >/dev/null 2>&1; then
   npm install --global pnpm@9.15.3
 fi
 
-echo "[VOLTRA] Installing dependencies..."
-pnpm install --frozen-lockfile
+echo "[VOLTRA] Installing dependencies without optional native build scripts..."
+pnpm install --frozen-lockfile --ignore-scripts
+
+echo "[VOLTRA] Preparing the two required esbuild binaries..."
+esbuild_installers=(node_modules/.pnpm/esbuild@*/node_modules/esbuild/install.js)
+if [ ! -f "${esbuild_installers[0]}" ]; then
+  echo "[VOLTRA] ERROR: esbuild install scripts were not found."
+  exit 1
+fi
+for install_script in "${esbuild_installers[@]}"; do
+  node "$install_script"
+done
 
 echo "[VOLTRA] Building production Web client..."
 pnpm build
