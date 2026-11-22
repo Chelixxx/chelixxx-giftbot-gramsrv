@@ -110,4 +110,12 @@ if(contextCount !== 1) throw new Error('HTML branding patch expected one match, 
 viteText = viteText.replace(oldContext, newContext);
 fs.writeFileSync(vitePath, viteText, 'utf8');
 
+
+replaceOnce(
+  'vite.config.ts',
+  '    sourcemap: true,',
+  '    sourcemap: false,',
+  'Disable production source maps for the constrained static-host build'
+);
+
 console.log('VOLTRA RSA, transport, and branding patches applied.');
