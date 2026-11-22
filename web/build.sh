@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-SCRIPT_DIR="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLIENT_DIR="$SCRIPT_DIR/client"
 UPSTREAM_URL="https://github.com/iamxvbaba/gramsrv-tweb.git"
 UPSTREAM_COMMIT="8e6cc00b576364aa43824a1b3670bdee185046a1"
@@ -15,14 +15,15 @@ git -C "$CLIENT_DIR" checkout --quiet --detach FETCH_HEAD
 echo "[VOLTRA] Applying VOLTRA patches..."
 node "$SCRIPT_DIR/patch-voltra.mjs" "$CLIENT_DIR"
 
-export VITE_TELESRV_DC_HOST="\${VITE_TELESRV_DC_HOST:-voltra-server-production.up.railway.app}"
-export VITE_TELESRV_DC_PORT="\${VITE_TELESRV_DC_PORT:-443}"
-export VITE_TELESRV_WS_PATH="\${VITE_TELESRV_WS_PATH:-/apiws}"
-export VOLTRA_WEB_HOST="\${VOLTRA_WEB_HOST:-chelixxx-giftbot-gramsrv.pages.dev}"
+export VITE_TELESRV_DC_HOST="${VITE_TELESRV_DC_HOST:-voltra-server-production.up.railway.app}"
+export VITE_TELESRV_DC_PORT="${VITE_TELESRV_DC_PORT:-443}"
+export VITE_TELESRV_WS_PATH="${VITE_TELESRV_WS_PATH:-/apiws}"
+export VOLTRA_WEB_HOST="${VOLTRA_WEB_HOST:-chelixxx-giftbot-gramsrv.pages.dev}"
 
 cd "$CLIENT_DIR"
-corepack enable
-corepack prepare pnpm@9.15.3 --activate
+if ! command -v pnpm >/dev/null 2>&1; then
+  npm install --global pnpm@9.15.3
+fi
 
 echo "[VOLTRA] Installing dependencies..."
 pnpm install --frozen-lockfile
@@ -32,5 +33,4 @@ pnpm build
 
 test -s dist/index.html
 cp "$SCRIPT_DIR/_redirects" dist/_redirects
-
 echo "[VOLTRA] Build ready: $CLIENT_DIR/dist"
