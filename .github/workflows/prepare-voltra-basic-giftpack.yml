@@ -77,15 +77,16 @@ jobs:
               }
 
               with zipfile.ZipFile(output, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as target:
-                  target.writestr('pack.json', json.dumps(clean_manifest, ensure_ascii=False, indent=2) + '\\n')
+                  target.writestr('pack.json', json.dumps(clean_manifest, ensure_ascii=False, indent=2))
                   for asset in sorted(used_assets):
                       target.writestr(asset, source.read(asset))
                   target.write(repo / 'LICENSE', 'LICENSE')
                   notice = repo / 'README.md'
-                  target.writestr('SOURCE-NOTICE.txt',
-                      'Gift animations and pack design subset adapted from owpengram/owpengram-giftpacks.\\n'
-                      'Original repository license: Apache License 2.0 (see LICENSE).\\n'
-                      'VOLTRA pack contains only the fixed-price basic gifts; auction and random-upgrade items were excluded.\\n')
+                  target.writestr('SOURCE-NOTICE.txt', chr(10).join([
+                      'Gift animations and pack design subset adapted from owpengram/owpengram-giftpacks.',
+                      'Original repository license: Apache License 2.0 (see LICENSE).',
+                      'VOLTRA pack contains only fixed-price basic gifts; auction and random-upgrade items were excluded.'
+                  ]))
 
           with zipfile.ZipFile(output) as check:
               bad = check.testzip()
