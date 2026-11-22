@@ -32,5 +32,23 @@ echo "[VOLTRA] Building production Web client..."
 pnpm build
 
 test -s dist/index.html
+
+# The upstream Vite config intentionally disables publicDir copying because
+# public/ also contains obsolete prebuilt JS chunks. Copy only live static assets.
+mkdir -p dist/assets
+if [ -d public/assets ]; then
+  cp -a public/assets/. dist/assets/
+fi
+for asset in browserconfig.xml decoderWorker.min.js decoderWorker.min.wasm \
+  encoderWorker.min.js encoderWorker.min.wasm recorder.min.js \
+  rlottie-wasm.js rlottie-wasm.wasm site_apple.webmanifest \
+  site.webmanifest version waveWorker.min.js; do
+  if [ -f "public/$asset" ]; then
+    cp -a "public/$asset" dist/
+  fi
+done
+
 cp "$SCRIPT_DIR/_redirects" dist/_redirects
+test -s dist/assets/fonts/Roboto-Medium.woff2
+
 echo "[VOLTRA] Build ready: $CLIENT_DIR/dist"

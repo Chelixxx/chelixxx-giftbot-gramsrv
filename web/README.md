@@ -16,6 +16,9 @@ The build pins the public `iamxvbaba/gramsrv-tweb` source to commit
 `8e6cc00b576364aa43824a1b3670bdee185046a1`, then applies the VOLTRA Railway
 RSA key, the private-WebSocket transport guard, and VOLTRA branding before building.
 
+It also copies the source client's static fonts, images, audio, stickers, and required
+worker/WASM assets while deliberately excluding stale prebuilt JavaScript bundles.
+
 The client connects over secure WebSocket to:
 
 - Host: `voltra-server-production.up.railway.app`
