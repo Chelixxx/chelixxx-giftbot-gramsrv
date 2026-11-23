@@ -97,12 +97,18 @@ function rebrandObjectValues(source) {
 }
 
 function replaceObjectValue(source, key, value) {
-  const escaped = key.replace(/[.]/g, '\\.');
-  const pattern = new RegExp("(['\\\"])"+ escaped +"['\\\"]\\\\s*:\\\\s*'((?:\\\\\\\\.|[^'\\\\\\\\])*)'");
+  const escaped = key.replace(/\./g, '\\.');
+  const pattern = new RegExp("(['\"])"+ escaped +"\\1\\s*:\\s*'((?:\\\\.|[^'\\\\])*)'");
   if(!pattern.test(source)) throw new Error('Missing local language key: ' + key);
-  const safeValue = value.replace(/\\\\/g, '\\\\\\\\').replace(/\\r?\\n/g, '\\\\n').replace(/'/g, "\\\\'");
+  const safeValue = value.replace(/\\/g, '\\\\').replace(/\r?\n/g, '\\n').replace(/'/g, "\\'");
   return source.replace(pattern, "'" + key + "': '" + safeValue + "'");
 }
+
+replaceOnce("src/config/app.ts", "  langPackCode: 'en',", "  langPackCode: 'ru',", "Set Russian as default language");
+replaceOnce("src/index.ts", "    const langPack = await I18n.getCacheLangPackAndApply();\n    setDocumentLangPackProperties(langPack);", "    let langPack = await I18n.getCacheLangPackAndApply();\n    if(langPack.lang_code !== App.langPackCode) {\n      try {\n        langPack = await I18n.getLangPackAndApply(App.langPackCode, true, true);\n      } catch(error) {\n        console.error('VOLTRA Russian language pack could not be loaded; keeping the cached pack.', error);\n      }\n    }\n    setDocumentLangPackProperties(langPack);", "Load Russian pack even when English is cached");
+replaceOnce("src/pages/cards/SignInCard.tsx", "import LanguageChangeButton from '@components/languageChangeButton';\n", "", "Remove sign-in locale-switch import");
+replaceOnce("src/pages/cards/SignInCard.tsx", "        {getCurrentAccount() === 1 && <LanguageChangeButton />}\n", "", "Remove sign-in locale-switch control");
+replaceOnce("src/components/sidebarLeft/tabs/language.tsx", "      <LanguageListSection />", "      <Section>\n        <RowTsx>\n          <RowTsx.Title titleRight=\"Русский\" titleRightSecondary>Язык интерфейса</RowTsx.Title>\n        </RowTsx>\n      </Section>", "Lock the interface language to Russian");
 
 const brand = path.join(root, 'src/config/brand.ts');
 let brandText = fs.readFileSync(brand, 'utf8');
@@ -141,8 +147,6 @@ if(contextCount !== 1) throw new Error('HTML branding patch expected one match, 
 viteText = viteText.replace(oldContext, newContext);
 fs.writeFileSync(vitePath, viteText, 'utf8');
 
-// The upstream client keeps visible product names in its local language sources,
-// separate from the brand constants above. Patch both default and packaged strings.
 let signInText = fs.readFileSync(path.join(root, 'src/langSign.ts'), 'utf8');
 const signInTranslations = {
   "Login.Title": "Войти в VOLTRA",
@@ -207,6 +211,8 @@ for(const [key, value] of Object.entries(signInTranslations)) {
 }
 fs.writeFileSync(path.join(root, 'src/langSign.ts'), signInText, 'utf8');
 
+// The upstream client keeps visible product names in its local language sources,
+// separate from the brand constants above. Patch both default and packaged strings.
 for(const file of ['src/lang.ts', 'src/langSign.ts']) {
   const filePath = path.join(root, file);
   const source = fs.readFileSync(filePath, 'utf8');
@@ -216,24 +222,16 @@ for(const file of ['src/lang.ts', 'src/langSign.ts']) {
 {
   const filePath = path.join(root, 'src/scripts/out/langPack.strings');
   const source = fs.readFileSync(filePath, 'utf8');
-  const branded = source.replace(/(=\\s*)\"((?:\\\\.|[^\"\\\\])*)\"/g, (_match, prefix, value) => prefix + '\"' + rebrandVisibleText(value) + '\"');
+  const branded = source.replace(/(=\s*)"((?:\\.|[^"\\])*)"/g, (_match, prefix, value) => prefix + '"' + rebrandVisibleText(value) + '"');
   fs.writeFileSync(filePath, branded, 'utf8');
 }
 
+const runtimeHelper = "  function rebrandVisibleText(value: string): string {\n    const urls: string[] = [];\n    let text = value.replace(/https?:\\/\\/[^\\s)\\]]+/gi, (url) => {\n      const marker = '__VOLTRA_EXTERNAL_URL_' + urls.length + '__';\n      urls.push(url);\n      return marker;\n    });\n    text = text.replace(/\\bTelesrv\\b/gi, 'VOLTRA')\n      .replace(/\\bTelegram\\s+Premium\\b/gi, 'VOLTRA Premium')\n      .replace(/\\bTelegram\\b/gi, 'VOLTRA')\n      .replace(/телеграмм?/gi, 'VOLTRA');\n    return text.replace(/__VOLTRA_EXTERNAL_URL_(\\d+)__/g, (_match, index) => urls[Number(index)]);\n  }";
+replaceOnce('src/lib/langPack.ts', '  export const countriesList: HelpCountry[] = [];', '  export const countriesList: HelpCountry[] = [];\n' + runtimeHelper, 'Add VOLTRA branding to runtime language packs');
+const runtimeLoop = "    for(const original of langPack.strings) {\n      const string: any = {...original};\n      for(const key of ['value', 'zero_value', 'one_value', 'two_value', 'few_value', 'many_value', 'other_value']) {\n        if(typeof string[key] === 'string') string[key] = rebrandVisibleText(string[key]);\n      }\n      strings.set(string.key as LangPackKey, string);\n    }";
+replaceOnce('src/lib/langPack.ts', "    for(const string of langPack.strings) {\n      strings.set(string.key as LangPackKey, string);\n    }", runtimeLoop, 'Rebrand Russian and cached language-pack strings');
 
-  const filePath = path.join(root, file);
-  const source = fs.readFileSync(filePath, 'utf8');
-  const branded = source.replace(/Telesrv/g, 'VOLTRA');
-  if(branded === source) {
-    throw new Error('Expected Telesrv brand text in ' + file + ', found none.');
-  }
-  fs.writeFileSync(filePath, branded, 'utf8');
-}
-
-replaceOnce("src/lib/langPack.ts", "  export const countriesList: HelpCountry[] = [];", "  export const countriesList: HelpCountry[] = [];\n  function rebrandVisibleText(value: string): string {\n    const urls: string[] = [];\n    let text = value.replace(/https?:\\/\\/[^\\s)\\]]+/gi, (url) => {\n      const marker = '__VOLTRA_EXTERNAL_URL_' + urls.length + '__';\n      urls.push(url);\n      return marker;\n    });\n    text = text.replace(/\\bTelesrv\\b/gi, 'VOLTRA')\n      .replace(/\\bTelegram\\s+Premium\\b/gi, 'VOLTRA Premium')\n      .replace(/\\bTelegram\\b/gi, 'VOLTRA')\n      .replace(/телеграмм?/gi, 'VOLTRA');\n    return text.replace(/__VOLTRA_EXTERNAL_URL_(\\d+)__/g, (_match, index) => urls[Number(index)]);\n  }", "Add runtime text rebranding");
-replaceOnce("src/lib/langPack.ts", "    for(const string of langPack.strings) {\n      strings.set(string.key as LangPackKey, string);\n    }", "    for(const original of langPack.strings) {\n      const string: any = {...original};\n      for(const key of ['value', 'zero_value', 'one_value', 'two_value', 'few_value', 'many_value', 'other_value']) {\n        if(typeof string[key] === 'string') string[key] = rebrandVisibleText(string[key]);\n      }\n      strings.set(string.key as LangPackKey, string);\n    }", "Rebrand cached and downloaded language packs");
-
-replaceOnce("index.html", "<html lang=\"en\">", "<html lang=\"ru\">", "Set HTML language to Russian");
+replaceOnce("index.html", "<html lang=\"en\">", "<html lang=\"ru\">", "Set HTML lang to ru");
 for(const file of ['public/site.webmanifest', 'public/site_apple.webmanifest']) {
   const filePath = path.join(root, file);
   const source = fs.readFileSync(filePath, 'utf8');
@@ -242,9 +240,6 @@ for(const file of ['public/site.webmanifest', 'public/site_apple.webmanifest']) 
     .replace(/A private, self-hosted messaging client for telesrv\./g, 'Частный мессенджер VOLTRA.');
   fs.writeFileSync(filePath, branded, 'utf8');
 }
-
-replaceOnce("src/lib/langPack.ts", "  export const countriesList: HelpCountry[] = [];", "  export const countriesList: HelpCountry[] = [];\n  function rebrandVisibleText(value: string): string {\n    const urls: string[] = [];\n    let text = value.replace(/https?:\\/\\/[^\\s)\\]]+/gi, (url) => {\n      const marker = '__VOLTRA_EXTERNAL_URL_' + urls.length + '__';\n      urls.push(url);\n      return marker;\n    });\n    text = text.replace(/\\bTelesrv\\b/gi, 'VOLTRA')\n      .replace(/\\bTelegram\\s+Premium\\b/gi, 'VOLTRA Premium')\n      .replace(/\\bTelegram\\b/gi, 'VOLTRA')\n      .replace(/телеграмм?/gi, 'VOLTRA');\n    return text.replace(/__VOLTRA_EXTERNAL_URL_(\\d+)__/g, (_match, index) => urls[Number(index)]);\n  }", "Add runtime text rebranding");
-replaceOnce("src/lib/langPack.ts", "    for(const string of langPack.strings) {\n      strings.set(string.key as LangPackKey, string);\n    }", "    for(const original of langPack.strings) {\n      const string: any = {...original};\n      for(const key of ['value', 'zero_value', 'one_value', 'two_value', 'few_value', 'many_value', 'other_value']) {\n        if(typeof string[key] === 'string') string[key] = rebrandVisibleText(string[key]);\n      }\n      strings.set(string.key as LangPackKey, string);\n    }", "Rebrand cached and downloaded language packs");
 
 // Replace the inherited T-shaped sign-in mark with a simple VOLTRA V mark.
 const oldLogo = `<g id="telesrv-logo">
@@ -265,12 +260,6 @@ replaceOnce(
   "interclientBroadcastChannel: 'voltra-web'",
   'VOLTRA browser broadcast channel'
 );
-
-replaceOnce("src/config/app.ts", "  langPackCode: 'en',", "  langPackCode: 'ru',", "Force VOLTRA Russian language");
-replaceOnce("src/index.ts", "    const langPack = await I18n.getCacheLangPackAndApply();\n    setDocumentLangPackProperties(langPack);", "    let langPack = await I18n.getCacheLangPackAndApply();\n    if(langPack.lang_code !== App.langPackCode) {\n      try {\n        langPack = await I18n.getLangPackAndApply(App.langPackCode, true, true);\n      } catch(error) {\n        console.error('VOLTRA Russian language pack could not be loaded; keeping the cached pack.', error);\n      }\n    }\n    setDocumentLangPackProperties(langPack);", "Load Russian language pack on startup");
-replaceOnce("src/pages/cards/SignInCard.tsx", "import LanguageChangeButton from '@components/languageChangeButton';\n", "", "Remove sign-in language switch import");
-replaceOnce("src/pages/cards/SignInCard.tsx", "        {getCurrentAccount() === 1 && <LanguageChangeButton />}\n", "", "Remove sign-in language switch");
-replaceOnce("src/components/sidebarLeft/tabs/language.tsx", "      <LanguageListSection />", "      <Section>\n        <RowTsx>\n          <RowTsx.Title titleRight=\"Русский\" titleRightSecondary>Язык интерфейса</RowTsx.Title>\n        </RowTsx>\n      </Section>", "Show Russian-only language setting");
 
 replaceOnce(
   'vite.config.ts',
