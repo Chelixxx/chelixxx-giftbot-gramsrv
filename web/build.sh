@@ -38,7 +38,12 @@ for install_script in "${esbuild_installers[@]}"; do
   node "$install_script"
 done
 
-echo "[VOLTRA] Building production Web client..."
+# TWEB_PREVIEW disables the upstream Vite checker plugin (TypeScript + ESLint).
+# Those checks spawn additional workers and can exceed Layero build-container memory.
+# Keep production bundling enabled; run static checks separately in CI.
+export TWEB_PREVIEW=1
+
+echo "[VOLTRA] Building production Web client (memory-safe mode; checker disabled)..."
 pnpm build
 
 test -s dist/index.html
