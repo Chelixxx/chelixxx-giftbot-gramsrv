@@ -72,7 +72,38 @@ const newSocket = "    const websocketPromise = deferredPromise<boolean>();\n" +
 replaceOnce('src/lib/mtproto/transports/controller.ts', oldSocket, newSocket, 'WebSocket transport guard');
 replaceOnce('src/lib/mtproto/transports/controller.ts', '      transport.destroy();', '      transport?.destroy();', 'Optional transport cleanup');
 
-const host = process.env.VOLTRA_WEB_HOST || 'chelixxx-giftbot-gramsrv.pages.dev';
+const host = process.env.VOLTRA_WEB_HOST || 'voltra-main.layero.app';
+
+function rebrandVisibleText(value) {
+  const urls = [];
+  let text = value.replace(/https?:\/\/[^\s)\]]+/gi, (url) => {
+    const marker = '__VOLTRA_EXTERNAL_URL_' + urls.length + '__';
+    urls.push(url);
+    return marker;
+  });
+  text = text
+    .replace(/\bTelesrv\b/gi, 'VOLTRA')
+    .replace(/\bTelegram\s+Premium\b/gi, 'VOLTRA Premium')
+    .replace(/\bTelegram\b/gi, 'VOLTRA')
+    .replace(/телеграмм?/gi, 'VOLTRA')
+    .replace(/telesrv\.net/gi, host);
+  return text.replace(/__VOLTRA_EXTERNAL_URL_(\d+)__/g, (_match, index) => urls[Number(index)]);
+}
+
+function rebrandObjectValues(source) {
+  return source.replace(/(:\s*)'((?:\\.|[^'\\])*)'/g, (_match, prefix, value) =>
+    prefix + "'" + rebrandVisibleText(value) + "'"
+  );
+}
+
+function replaceObjectValue(source, key, value) {
+  const escaped = key.replace(/[.]/g, '\\.');
+  const pattern = new RegExp("(['\\\"])"+ escaped +"['\\\"]\\\\s*:\\\\s*'((?:\\\\\\\\.|[^'\\\\\\\\])*)'");
+  if(!pattern.test(source)) throw new Error('Missing local language key: ' + key);
+  const safeValue = value.replace(/\\\\/g, '\\\\\\\\').replace(/\\r?\\n/g, '\\\\n').replace(/'/g, "\\\\'");
+  return source.replace(pattern, "'" + key + "': '" + safeValue + "'");
+}
+
 const brand = path.join(root, 'src/config/brand.ts');
 let brandText = fs.readFileSync(brand, 'utf8');
 const brandReplacements = [
@@ -112,7 +143,84 @@ fs.writeFileSync(vitePath, viteText, 'utf8');
 
 // The upstream client keeps visible product names in its local language sources,
 // separate from the brand constants above. Patch both default and packaged strings.
-for(const file of ['src/lang.ts', 'src/scripts/out/langPack.strings']) {
+let signInText = fs.readFileSync(path.join(root, 'src/langSign.ts'), 'utf8');
+const signInTranslations = {
+  "Login.Title": "Войти в VOLTRA",
+  "Login.PhoneLabel": "Номер телефона",
+  "Login.PhoneLabelInvalid": "Неверный номер телефона",
+  "Login.StartText": "Подтвердите код страны\nи введите номер телефона.",
+  "Login.Code.SentSms": "Мы отправили SMS\nс кодом подтверждения.",
+  "Login.Code.SentInApp": "Мы отправили сообщение в VOLTRA\nс кодом подтверждения.",
+  "Login.Code.SentCall": "Мы позвоним вам и продиктуем\nкод подтверждения.",
+  "Login.Code.SentEmail": "Проверьте почту **%s** (в том числе папку «Спам») и введите отправленный код.",
+  "Login.Code.SentUnknown": "Проверьте сообщения\nна наличие кода (тип: %s)",
+  "Login.Password.Title": "Введите пароль",
+  "Login.Password.Subtitle": "Ваш аккаунт защищён\nдополнительным паролем",
+  "Login.Register.Subtitle": "Укажите имя и добавьте\nфотографию профиля",
+  "PleaseWait": "Подождите...",
+  "ForgotPassword": "[Забыли пароль?]()",
+  "TroubleEmail": "[Нет доступа к этой почте?]()",
+  "Login.ResetPassword.Title": "Сброс пароля",
+  "Login.ResetPassword.Subtitle": "Введите код, который мы отправили\nна вашу почту **%s**.",
+  "Login.ResetPassword.Cancel": "Отмена",
+  "Login.ResetPassword.NoEmailText": "При настройке пароля вы не указали резервную почту. Сейчас остаётся вспомнить пароль или сбросить аккаунт.",
+  "Login.ResetPassword.TroubleEmailText": "Если восстановить доступ к почте не удаётся, остаётся вспомнить пароль или сбросить аккаунт.",
+  "Login.ResetPassword.ResetAccount": "Сбросить аккаунт",
+  "Login.ResetAccount.Title": "Предупреждение",
+  "Login.ResetAccount.Text": "Это действие нельзя отменить.\n\nПри сбросе аккаунта все сообщения и чаты будут удалены.",
+  "Login.ResetAccountFail.Title": "Не удалось выполнить действие",
+  "Login.ResetAccountFail.TextCancelled": "Активный пользователь отменил недавнюю попытку сброса аккаунта. Повторите попытку через 7 дней.",
+  "Login.ResetAccountFail.TextWait": "Так как аккаунт активен и защищён паролем, из соображений безопасности он будет удалён через неделю.\n\nВы можете отменить это действие в любое время.\n\nДо сброса аккаунта осталось: %s.",
+  "Login.ResetEmail.Title": "Сброс почты",
+  "Login.ResetEmail.Text": "Вы можете изменить почту для входа, если вошли в VOLTRA с другого устройства.\n\nЕсли доступа к этой почте нет, её можно сбросить с помощью SMS-кода в **%s**.",
+  "Login.ResetEmail.Pending": "Почта будет сброшена через %s. [Сбросить сейчас по SMS]()",
+  "Login.ResetEmail.PleaseWait": "Сбрасываем почту, подождите...",
+  "Login.ResetEmail.NeedPremium": "Требуется VOLTRA Premium",
+  "Login.ResetEmail.NeedPremiumText": "Из-за высокой стоимости SMS в вашей стране для немедленного сброса почты по SMS требуется подписка **VOLTRA Premium**.\n\nВы можете попросить друга подарить вам подписку.",
+  "Login.Passkey": "Войти с помощью ключа доступа >",
+  "Login.Passkey.Error": "Что-то пошло не так",
+  "Login.Passkey.Error.NotFound": "Этот ключ доступа не привязан ни к одному аккаунту",
+  "Code": "Код",
+  "LoginPassword": "Пароль",
+  "YourName": "Ваше имя",
+  "FirstName": "Имя (обязательно)",
+  "LastName": "Фамилия (необязательно)",
+  "StartMessaging": "Начать общение",
+  "Country": "Страна",
+  "Contacts.PhoneNumber.Placeholder": "Номер телефона",
+  "Login.Next": "Далее",
+  "Login.ContinueOnLanguage": "Продолжить на русском",
+  "Login.QR.Title": "Вход по QR-коду",
+  "Login.QR.Help1": "Откройте подключённый клиент VOLTRA на телефоне",
+  "Login.QR.Help2": "Перейдите в **Настройки** > **Устройства** > **Добавить устройство**",
+  "Login.QR.Help3": "Наведите камеру телефона на этот экран, чтобы подтвердить вход",
+  "Login.QR.Cancel": "Войти по номеру телефона >",
+  "Login.QR.Login": "Войти по QR-коду >",
+  "Login.QR.Subtitle": "Отсканируйте код подключённым клиентом VOLTRA на телефоне",
+  "PhoneNumber.Code.Fragment.Info": "Получите код в разделе «Номера» на [Fragment](%1$@)",
+  "PHONE_CODE_INVALID": "Неверный код",
+  "PHONE_CODE_EXPIRED": "Срок действия кода истёк",
+  "PASSWORD_HASH_INVALID": "Неверный пароль"
+};
+for(const [key, value] of Object.entries(signInTranslations)) {
+  signInText = replaceObjectValue(signInText, key, value);
+}
+fs.writeFileSync(path.join(root, 'src/langSign.ts'), signInText, 'utf8');
+
+for(const file of ['src/lang.ts', 'src/langSign.ts']) {
+  const filePath = path.join(root, file);
+  const source = fs.readFileSync(filePath, 'utf8');
+  fs.writeFileSync(filePath, rebrandObjectValues(source), 'utf8');
+}
+
+{
+  const filePath = path.join(root, 'src/scripts/out/langPack.strings');
+  const source = fs.readFileSync(filePath, 'utf8');
+  const branded = source.replace(/(=\\s*)\"((?:\\\\.|[^\"\\\\])*)\"/g, (_match, prefix, value) => prefix + '\"' + rebrandVisibleText(value) + '\"');
+  fs.writeFileSync(filePath, branded, 'utf8');
+}
+
+
   const filePath = path.join(root, file);
   const source = fs.readFileSync(filePath, 'utf8');
   const branded = source.replace(/Telesrv/g, 'VOLTRA');
@@ -121,6 +229,22 @@ for(const file of ['src/lang.ts', 'src/scripts/out/langPack.strings']) {
   }
   fs.writeFileSync(filePath, branded, 'utf8');
 }
+
+replaceOnce("src/lib/langPack.ts", "  export const countriesList: HelpCountry[] = [];", "  export const countriesList: HelpCountry[] = [];\n  function rebrandVisibleText(value: string): string {\n    const urls: string[] = [];\n    let text = value.replace(/https?:\\/\\/[^\\s)\\]]+/gi, (url) => {\n      const marker = '__VOLTRA_EXTERNAL_URL_' + urls.length + '__';\n      urls.push(url);\n      return marker;\n    });\n    text = text.replace(/\\bTelesrv\\b/gi, 'VOLTRA')\n      .replace(/\\bTelegram\\s+Premium\\b/gi, 'VOLTRA Premium')\n      .replace(/\\bTelegram\\b/gi, 'VOLTRA')\n      .replace(/телеграмм?/gi, 'VOLTRA');\n    return text.replace(/__VOLTRA_EXTERNAL_URL_(\\d+)__/g, (_match, index) => urls[Number(index)]);\n  }", "Add runtime text rebranding");
+replaceOnce("src/lib/langPack.ts", "    for(const string of langPack.strings) {\n      strings.set(string.key as LangPackKey, string);\n    }", "    for(const original of langPack.strings) {\n      const string: any = {...original};\n      for(const key of ['value', 'zero_value', 'one_value', 'two_value', 'few_value', 'many_value', 'other_value']) {\n        if(typeof string[key] === 'string') string[key] = rebrandVisibleText(string[key]);\n      }\n      strings.set(string.key as LangPackKey, string);\n    }", "Rebrand cached and downloaded language packs");
+
+replaceOnce("index.html", "<html lang=\"en\">", "<html lang=\"ru\">", "Set HTML language to Russian");
+for(const file of ['public/site.webmanifest', 'public/site_apple.webmanifest']) {
+  const filePath = path.join(root, file);
+  const source = fs.readFileSync(filePath, 'utf8');
+  const branded = source.replace(/Telesrv Web K/g, 'VOLTRA Web')
+    .replace(/Telesrv K/g, 'VOLTRA')
+    .replace(/A private, self-hosted messaging client for telesrv\./g, 'Частный мессенджер VOLTRA.');
+  fs.writeFileSync(filePath, branded, 'utf8');
+}
+
+replaceOnce("src/lib/langPack.ts", "  export const countriesList: HelpCountry[] = [];", "  export const countriesList: HelpCountry[] = [];\n  function rebrandVisibleText(value: string): string {\n    const urls: string[] = [];\n    let text = value.replace(/https?:\\/\\/[^\\s)\\]]+/gi, (url) => {\n      const marker = '__VOLTRA_EXTERNAL_URL_' + urls.length + '__';\n      urls.push(url);\n      return marker;\n    });\n    text = text.replace(/\\bTelesrv\\b/gi, 'VOLTRA')\n      .replace(/\\bTelegram\\s+Premium\\b/gi, 'VOLTRA Premium')\n      .replace(/\\bTelegram\\b/gi, 'VOLTRA')\n      .replace(/телеграмм?/gi, 'VOLTRA');\n    return text.replace(/__VOLTRA_EXTERNAL_URL_(\\d+)__/g, (_match, index) => urls[Number(index)]);\n  }", "Add runtime text rebranding");
+replaceOnce("src/lib/langPack.ts", "    for(const string of langPack.strings) {\n      strings.set(string.key as LangPackKey, string);\n    }", "    for(const original of langPack.strings) {\n      const string: any = {...original};\n      for(const key of ['value', 'zero_value', 'one_value', 'two_value', 'few_value', 'many_value', 'other_value']) {\n        if(typeof string[key] === 'string') string[key] = rebrandVisibleText(string[key]);\n      }\n      strings.set(string.key as LangPackKey, string);\n    }", "Rebrand cached and downloaded language packs");
 
 // Replace the inherited T-shaped sign-in mark with a simple VOLTRA V mark.
 const oldLogo = `<g id="telesrv-logo">
@@ -141,6 +265,12 @@ replaceOnce(
   "interclientBroadcastChannel: 'voltra-web'",
   'VOLTRA browser broadcast channel'
 );
+
+replaceOnce("src/config/app.ts", "  langPackCode: 'en',", "  langPackCode: 'ru',", "Force VOLTRA Russian language");
+replaceOnce("src/index.ts", "    const langPack = await I18n.getCacheLangPackAndApply();\n    setDocumentLangPackProperties(langPack);", "    let langPack = await I18n.getCacheLangPackAndApply();\n    if(langPack.lang_code !== App.langPackCode) {\n      try {\n        langPack = await I18n.getLangPackAndApply(App.langPackCode, true, true);\n      } catch(error) {\n        console.error('VOLTRA Russian language pack could not be loaded; keeping the cached pack.', error);\n      }\n    }\n    setDocumentLangPackProperties(langPack);", "Load Russian language pack on startup");
+replaceOnce("src/pages/cards/SignInCard.tsx", "import LanguageChangeButton from '@components/languageChangeButton';\n", "", "Remove sign-in language switch import");
+replaceOnce("src/pages/cards/SignInCard.tsx", "        {getCurrentAccount() === 1 && <LanguageChangeButton />}\n", "", "Remove sign-in language switch");
+replaceOnce("src/components/sidebarLeft/tabs/language.tsx", "      <LanguageListSection />", "      <Section>\n        <RowTsx>\n          <RowTsx.Title titleRight=\"Русский\" titleRightSecondary>Язык интерфейса</RowTsx.Title>\n        </RowTsx>\n      </Section>", "Show Russian-only language setting");
 
 replaceOnce(
   'vite.config.ts',
