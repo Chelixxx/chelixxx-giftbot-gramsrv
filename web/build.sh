@@ -12,13 +12,16 @@ git -C "$CLIENT_DIR" remote add origin "$UPSTREAM_URL"
 git -C "$CLIENT_DIR" fetch --quiet --depth=1 origin "$UPSTREAM_COMMIT"
 git -C "$CLIENT_DIR" checkout --quiet --detach FETCH_HEAD
 
+# The actual public Layero hostname must be known to the client before
+# patch-voltra.mjs rewrites the upstream brand and accepted host list.
+export VOLTRA_WEB_HOST="${VOLTRA_WEB_HOST:-voltra-main.layero.app}"
+
 echo "[VOLTRA] Applying VOLTRA patches..."
 node "$SCRIPT_DIR/patch-voltra.mjs" "$CLIENT_DIR"
 
 export VITE_TELESRV_DC_HOST="${VITE_TELESRV_DC_HOST:-voltra-server-production.up.railway.app}"
 export VITE_TELESRV_DC_PORT="${VITE_TELESRV_DC_PORT:-443}"
 export VITE_TELESRV_WS_PATH="${VITE_TELESRV_WS_PATH:-/apiws}"
-export VOLTRA_WEB_HOST="${VOLTRA_WEB_HOST:-voltra.layero.app}"
 
 cd "$CLIENT_DIR"
 if ! command -v pnpm >/dev/null 2>&1; then
