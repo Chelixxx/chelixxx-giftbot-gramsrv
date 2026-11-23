@@ -23,6 +23,16 @@ COPY patches/advertise-port.patch /tmp/advertise-port.patch
 RUN git apply --check /tmp/advertise-port.patch \
     && git apply /tmp/advertise-port.patch
 
+# Fetch the official star-gift snapshot separately: the pinned gramsrv source
+# commit contains the catalog reader but intentionally does not vendor the
+# large, periodically refreshed official-gifts data directory.
+RUN git clone --depth=1 --filter=blob:none --sparse https://github.com/FromGram/server.git /tmp/fromgram \
+    && git -C /tmp/fromgram sparse-checkout set data/official-gifts \
+    && mkdir -p /src/data \
+    && cp -a /tmp/fromgram/data/official-gifts /src/data/official-gifts \
+    && test -s /src/data/official-gifts/manifest.json \
+    && rm -rf /tmp/fromgram
+
 ENV CGO_ENABLED=0
 RUN go mod download
 
@@ -49,6 +59,7 @@ RUN apk add --no-cache ca-certificates tzdata ffmpeg openssl su-exec \
 
 COPY --from=build /out/telesrv /usr/local/bin/telesrv
 COPY --from=build --chown=telesrv:telesrv /src/data/langpack/ /usr/share/telesrv/langpack/
+COPY --from=build --chown=telesrv:telesrv /src/data/official-gifts/ /app/official-gifts/
 COPY --chmod=0555 docker-entrypoint.sh /usr/local/bin/telesrv-container-entrypoint
 
 WORKDIR /app
@@ -57,7 +68,8 @@ ENV TELESRV_RSA_KEY=/var/lib/telesrv/server_rsa.pem \
     TELESRV_BLOB_DIR=/var/lib/telesrv/blobs \
     TELESRV_BLOB_STAGING_DIR=/var/lib/telesrv/blob-staging \
     TELESRV_IDENTITY_DIR=/var/lib/telesrv/identity \
-    TELESRV_MAPTILE_CACHE_DIR=/var/lib/telesrv/maptiles
+    TELESRV_MAPTILE_CACHE_DIR=/var/lib/telesrv/maptiles \\
+    TELESRV_OFFICIAL_GIFTS_DIR=/app/official-gifts
 
 # The entrypoint fixes mounted volume ownership, then drops privileges.
 USER root
