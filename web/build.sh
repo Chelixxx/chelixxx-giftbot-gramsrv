@@ -5,6 +5,12 @@ CLIENT_DIR="$SCRIPT_DIR/client"
 UPSTREAM_URL="https://github.com/iamxvbaba/gramsrv-tweb.git"
 UPSTREAM_COMMIT="8e6cc00b576364aa43824a1b3670bdee185046a1"
 
+# Set the public client origin before patching branding/metadata.
+export VOLTRA_WEB_HOST="${VOLTRA_WEB_HOST:-voltra-web-production.up.railway.app}"
+export VITE_TELESRV_DC_HOST="${VITE_TELESRV_DC_HOST:-voltra-server-production.up.railway.app}"
+export VITE_TELESRV_DC_PORT="${VITE_TELESRV_DC_PORT:-443}"
+export VITE_TELESRV_WS_PATH="${VITE_TELESRV_WS_PATH:-/apiws}"
+
 echo "[VOLTRA] Preparing pinned Web client source..."
 rm -rf "$CLIENT_DIR"
 git init -q "$CLIENT_DIR"
@@ -14,11 +20,6 @@ git -C "$CLIENT_DIR" checkout --quiet --detach FETCH_HEAD
 
 echo "[VOLTRA] Applying VOLTRA patches..."
 node "$SCRIPT_DIR/patch-voltra.mjs" "$CLIENT_DIR"
-
-export VITE_TELESRV_DC_HOST="${VITE_TELESRV_DC_HOST:-voltra-server-production.up.railway.app}"
-export VITE_TELESRV_DC_PORT="${VITE_TELESRV_DC_PORT:-443}"
-export VITE_TELESRV_WS_PATH="${VITE_TELESRV_WS_PATH:-/apiws}"
-export VOLTRA_WEB_HOST="${VOLTRA_WEB_HOST:-voltra.layero.app}"
 
 cd "$CLIENT_DIR"
 if ! command -v pnpm >/dev/null 2>&1; then
