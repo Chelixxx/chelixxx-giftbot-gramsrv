@@ -110,6 +110,37 @@ if(contextCount !== 1) throw new Error('HTML branding patch expected one match, 
 viteText = viteText.replace(oldContext, newContext);
 fs.writeFileSync(vitePath, viteText, 'utf8');
 
+// The upstream client keeps visible product names in its local language sources,
+// separate from the brand constants above. Patch both default and packaged strings.
+for(const file of ['src/lang.ts', 'src/scripts/out/langPack.strings']) {
+  const filePath = path.join(root, file);
+  const source = fs.readFileSync(filePath, 'utf8');
+  const branded = source.replace(/Telesrv/g, 'VOLTRA');
+  if(branded === source) {
+    throw new Error('Expected Telesrv brand text in ' + file + ', found none.');
+  }
+  fs.writeFileSync(filePath, branded, 'utf8');
+}
+
+// Replace the inherited T-shaped sign-in mark with a simple VOLTRA V mark.
+const oldLogo = `<g id="telesrv-logo">
+          <rect x="8" y="8" width="144" height="144" rx="40" fill="#6558E8"/>
+          <path d="M44 57h68c9 0 16 7 16 16s-7 16-16 16H87c-10 0-18 8-18 18v25" fill="none" stroke="#FFF" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M43 87h27" fill="none" stroke="#FFF" stroke-width="16" stroke-linecap="round"/>
+          <circle cx="42" cy="87" r="12" fill="#27C7A5" stroke="#FFF" stroke-width="5"/>
+        </g>`;
+const newLogo = `<g id="telesrv-logo">
+          <rect x="8" y="8" width="144" height="144" rx="40" fill="#6558E8"/>
+          <path d="M43 43L80 123L117 43" fill="none" stroke="#FFF" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M93 31L74 76H91L67 130" fill="none" stroke="#27C7A5" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>`;
+replaceOnce('index.html', oldLogo, newLogo, 'VOLTRA sign-in logo');
+replaceOnce(
+  'src/config/app.ts',
+  "interclientBroadcastChannel: 'telesrv-web'",
+  "interclientBroadcastChannel: 'voltra-web'",
+  'VOLTRA browser broadcast channel'
+);
 
 replaceOnce(
   'vite.config.ts',
