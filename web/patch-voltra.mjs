@@ -297,12 +297,12 @@ const oldSignInWarmup = [
   "        g();",
   "      });",
   ""
-].join("\\n");
+].join("\n");
 replaceOnce(
   'src/pages/cards/SignInCard.tsx',
   oldSignInWarmup,
-  "      // Restore sequential DC pre-warming, pausing whenever a login request is active.\\n" +
-  "      // This keeps other data centers ready without competing with auth.sendCode.\\n",
+  "      // Restore sequential DC pre-warming, pausing whenever a login request is active.\n" +
+  "      // This keeps other data centers ready without competing with auth.sendCode.\n",
   'Restore safe sequential sign-in DC pre-warming'
 );
 
