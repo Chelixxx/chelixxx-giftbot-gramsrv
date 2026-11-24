@@ -41,10 +41,10 @@ const oldTelegramURLDecl = "  let tgMeMatch, telescoPeMatch, tgMatch;";
 const newTelegramURLDecl = "  let tgMeMatch, telescoPeMatch, tgMatch, telegramPackMatch;";
 replaceOnce('src/lib/richTextProcessor/wrapUrl.ts', oldTelegramURLDecl, newTelegramURLDecl, 'Recognize Telegram sticker links');
 
-const oldTelescoPeBranch = String.raw`} else if((telescoPeMatch = url.match(/^(?:https?:\\/\\/)?telesco\\.pe\\/([^/?]+)\\/(\\d+)/))) {`;
-const newTelescoPeBranch = String.raw`} else if((telegramPackMatch = url.match(/^(?:https?:\\/\\/)?(?:www\\.)?(?:t\\.me|telegram\\.me)\\/(addstickers|addemoji)\\/([A-Za-z0-9_]+)/i))) {
+const oldTelescoPeBranch = String.raw`} else if((telescoPeMatch = url.match(/^(?:https?:\/\/)?telesco\.pe\/([^/?]+)\/(\d+)/))) {`;
+const newTelescoPeBranch = String.raw`} else if((telegramPackMatch = url.match(/^(?:https?:\/\/)?(?:www\.)?(?:t\.me|telegram\.me)\/(addstickers|addemoji)\/([A-Za-z0-9_]+)/i))) {
     onclick = telegramPackMatch[1].toLowerCase() as any;
-  } else if((telescoPeMatch = url.match(/^(?:https?:\\/\\/)?telesco\\.pe\\/([^/?]+)\\/(\\d+)/))) {`;
+  } else if((telescoPeMatch = url.match(/^(?:https?:\/\/)?telesco\.pe\/([^/?]+)\/(\d+)/))) {`;
 replaceOnce('src/lib/richTextProcessor/wrapUrl.ts', oldTelescoPeBranch, newTelescoPeBranch, 'Open original Telegram sticker and emoji links inside VOLTRA');
 
 replaceOnce(
