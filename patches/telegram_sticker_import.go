@@ -62,7 +62,6 @@ var (
 	telegramStickerImportGroup singleflight.Group
 	telegramStickerHTTPClient  = &http.Client{Timeout: 35 * time.Second}
 	telegramStickerFileSlots   = make(chan struct{}, 6)
-	telegramStickerFileMu      sync.Mutex
 )
 
 // ImportTelegramStickerSet imports a public sticker or custom-emoji set on first
@@ -114,7 +113,7 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 
 	kind := domain.StickerSetKindStickers
 	switch remote.StickerType {
-	case "regular":
+	case "", "regular":
 		kind = domain.StickerSetKindStickers
 	case "custom_emoji":
 		kind = domain.StickerSetKindEmoji
@@ -123,7 +122,6 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 	}
 
 	items := make([]domain.StickerSetItemInput, len(remote.Stickers))
-	uploadedDocs := make([]domain.Document, len(remote.Stickers))
 	var firstErr error
 	var firstErrOnce sync.Once
 	var wait sync.WaitGroup
@@ -170,7 +168,6 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 			if emoji == "" {
 				emoji = "🙂"
 			}
-			uploadedDocs[i] = doc
 			items[i] = domain.StickerSetItemInput{
 				DocumentID:         doc.ID,
 				DocumentAccessHash: doc.AccessHash,
@@ -204,7 +201,7 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 		Date:      int(time.Now().Unix()),
 	})
 	if err != nil {
-		return telegramStickerImportResult{}, fmt.Errorf("create VOLTRA sticker set: %w", err)
+		return telegramStickerImportResult{}, fmt.Errorf("create VOLTRA sticker set: %v", err)
 	}
 	return telegramStickerImportResult{Set: set, Documents: docs, Imported: true}, nil
 }
@@ -238,7 +235,7 @@ func downloadTelegramSticker(ctx context.Context, token string, sticker telegram
 	}
 	resp, err := telegramStickerHTTPClient.Do(req)
 	if err != nil {
-		return nil, "", fmt.Errorf("fetch Telegram sticker file: %w", err)
+		return nil, "", fmt.Errorf("fetch Telegram sticker file failed")
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
@@ -261,11 +258,11 @@ func telegramBotCall(ctx context.Context, token, method string, query url.Values
 	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
-		return fmt.Errorf("create Telegram Bot API request: %w", err)
+		return fmt.Errorf("create Telegram Bot API request failed")
 	}
 	resp, err := telegramStickerHTTPClient.Do(req)
 	if err != nil {
-		return fmt.Errorf("connect to Telegram Bot API: %w", err)
+		return fmt.Errorf("connect to Telegram Bot API failed")
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
