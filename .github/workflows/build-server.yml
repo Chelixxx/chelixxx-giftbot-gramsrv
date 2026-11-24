@@ -37,10 +37,27 @@ jobs:
           context: .
           platforms: linux/amd64
           push: true
+          target: server
           tags: ghcr.io/chelixxx/voltra-server:main
           labels: |
             org.opencontainers.image.source=https://github.com/Chelixxx/chelixxx-giftbot-gramsrv
             org.opencontainers.image.description=VOLTRA server built from pinned gramsrv source
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Build and publish admin console
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          target: admin
+          platforms: linux/amd64
+          push: true
+          tags: ghcr.io/chelixxx/voltra-admin:main
+          labels: |
+            org.opencontainers.image.source=https://github.com/Chelixxx/chelixxx-giftbot-gramsrv
+            org.opencontainers.image.description=VOLTRA admin console built from pinned gramsrv source
           cache-from: type=gha
           cache-to: type=gha,mode=max
           provenance: false
