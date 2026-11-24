@@ -10,7 +10,7 @@ index 0000000..0000000 100644
 +// exposes the built-in custom-emoji system sets so operators can inspect the
 +// full imported emoji seed; unrelated internal system sets remain hidden.
  func (s *readStore) ListStickerSets(ctx context.Context, kind string) ([]StickerSetRow, error) {
-@@ -1529,4 +1529,25 @@
+@@ -1529,4 +1529,23 @@
  FROM sticker_sets
 -WHERE deleted = false AND set_kind <> 'system'
 -  AND ($1 = '' OR set_kind = $1)
