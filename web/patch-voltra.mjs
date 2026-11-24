@@ -251,44 +251,85 @@ const oldSignInWarmup = [
   "",
   "      let promise: Promise<any>;",
   "      if(nearestDcResult.nearest_dc !== nearestDcResult.this_dc) {",
-  "        promise = managers.apiManager.getNetworkerVoid(nearestDcResult.nearest_dc).then(() => {",
-  "          done.push(nearestDcResult.nearest_dc);",
+  "        promise = new Promise<void>((resolve) => {",
+  "          const warmNearest = () => {",
+  "            if(cancelled) return resolve();",
+  "            if(submitting()) {",
+  "              setTimeout(warmNearest, 3000);",
+  "              return;",
+  "            }",
+  "            managers.apiManager.getNetworkerVoid(nearestDcResult.nearest_dc).then(() => {",
+  "              done.push(nearestDcResult.nearest_dc);",
+  "              resolve();",
+  "            }, resolve);",
+  "          };",
+  "          warmNearest();",
   "        });",
   "      }",
   "",
   "      (promise || Promise.resolve()).then(() => {",
   "        if(cancelled) return;",
-  "",
   "        done.forEach((dcId) => dcs.delete(dcId));",
-  "",
   "        const _dcs = [...dcs];",
   "        const g = async(): Promise<void> => {",
   "          if(cancelled) return;",
   "          const dcId = _dcs.shift();",
   "          if(!dcId) return;",
-  "",
+  "          if(submitting()) {",
+  "            _dcs.unshift(dcId);",
+  "            setTimeout(g, 3000);",
+  "            return;",
+  "          }",
   "          const accountData = await AccountController.get(getCurrentAccount());",
   "          const key = accountData[`dc${dcId as TrueDcId}_auth_key`];",
-  "",
   "          if(key) return g();",
-  "",
-  "          // ! если одновременно запросить все нетворкеры, не будет проходить запрос на код",
+  "          // Warm DCs sequentially; never compete with the active login request.",
   "          setTimeout(() => {",
   "            if(cancelled) return;",
+  "            if(submitting()) {",
+  "              _dcs.unshift(dcId);",
+  "              setTimeout(g, 3000);",
+  "              return;",
+  "            }",
   "            managers.apiManager.getNetworkerVoid(dcId).finally(g);",
   "          }, 3000);",
   "        };",
-  "",
   "        g();",
   "      });",
   ""
-].join("\n");
+].join("\\n");
 replaceOnce(
   'src/pages/cards/SignInCard.tsx',
   oldSignInWarmup,
-  "      // VOLTRA: do not pre-open other DC networkers on the sign-in screen.\n" +
-  "      // They can stall auth.sendCode while the client is still connecting.\n",
-  'Remove competing sign-in language/DC warm-up requests'
+  "      // Restore sequential DC pre-warming, pausing whenever a login request is active.\\n" +
+  "      // This keeps other data centers ready without competing with auth.sendCode.\\n",
+  'Restore safe sequential sign-in DC pre-warming'
+);
+
+// Do not leave the login button spinning forever if a transport response is lost.
+replaceOnce(
+  'src/pages/cards/SignInCard.tsx',
+  "    managers.apiManager.invokeApi('auth.sendCode', {",
+  "    const sendCodeRequest = managers.apiManager.invokeApi('auth.sendCode', {",
+  'Create explicit sendCode request'
+);
+replaceOnce(
+  'src/pages/cards/SignInCard.tsx',
+  "    }).then(async(code) => {",
+  "    });\n    let sendCodeTimeout: number;\n    const sendCodeWithTimeout = new Promise<any>((resolve, reject) => {\n      sendCodeTimeout = window.setTimeout(() => reject({type: 'NETWORK_TIMEOUT'}), 25000);\n      sendCodeRequest.then(resolve, reject);\n    });\n    sendCodeWithTimeout.then(async(code) => {\n      window.clearTimeout(sendCodeTimeout);",
+  'Add bounded auth.sendCode wait'
+);
+replaceOnce(
+  'src/pages/cards/SignInCard.tsx',
+  "    }).catch((err) => {\n      setSubmitting(false);",
+  "    }).catch((err) => {\n      window.clearTimeout(sendCodeTimeout);\n      setSubmitting(false);",
+  'Always clear auth timeout on error'
+);
+replaceOnce(
+  'src/pages/cards/SignInCard.tsx',
+  "          setNextContent(err.type);",
+  "          setNextContent(err.type === 'NETWORK_TIMEOUT' ? 'Сервер не ответил за 25 секунд. Проверьте соединение и повторите попытку.' : (err.type || 'Ошибка соединения'));",
+  'Show readable login timeout'
 );
 
 replaceOnce("index.html", "<html lang=\"en\">", "<html lang=\"ru\">", "Set HTML lang to ru");
