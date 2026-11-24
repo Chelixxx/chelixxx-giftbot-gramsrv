@@ -1,7 +1,7 @@
 diff --git a/cmd/telesrv-admin/readstore.go b/cmd/telesrv-admin/readstore.go
 --- a/cmd/telesrv-admin/readstore.go
 +++ b/cmd/telesrv-admin/readstore.go
-@@ -1530,2 +1530,23 @@
+@@ -1530,2 +1530,20 @@
 -WHERE deleted = false AND set_kind <> 'system'
 -  AND ($1 = '' OR set_kind = $1)
 +WHERE deleted = false
