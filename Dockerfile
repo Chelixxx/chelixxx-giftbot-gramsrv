@@ -80,7 +80,7 @@ ENV TELESRV_RSA_KEY=/var/lib/telesrv/server_rsa.pem \
     TELESRV_BLOB_STAGING_DIR=/var/lib/telesrv/blob-staging \
     TELESRV_IDENTITY_DIR=/var/lib/telesrv/identity \
     TELESRV_MAPTILE_CACHE_DIR=/var/lib/telesrv/maptiles \
-    TELESRV_OFFICIAL_GIFTS_DIR=/app/official-gifts \\
+    TELESRV_OFFICIAL_GIFTS_DIR=/app/official-gifts \
     TELESRV_STICKER_SEED_DIR=/app/sticker-seed
 
 # The entrypoint fixes mounted volume ownership, then drops privileges.
