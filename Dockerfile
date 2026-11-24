@@ -55,6 +55,15 @@ RUN GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
       -ldflags="-s -w -X main.gitCommit=${UPSTREAM_COMMIT} -X main.gitBranch=main -X main.gitTreeState=clean -X main.buildTime=${BUILD_DATE}" \
       -o /out/telesrv ./cmd/telesrv
 
+# Build the admin console from the same pinned source and patched read-store query.
+FROM build AS build-admin
+RUN apk add --no-cache nodejs npm
+WORKDIR /src/cmd/telesrv-admin/web
+RUN npm ci && npm run build
+WORKDIR /src
+RUN GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
+    go build -trimpath -ldflags="-s -w" -o /out/telesrv-admin ./cmd/telesrv-admin
+
 FROM ${ALPINE_IMAGE} AS server
 
 RUN apk add --no-cache ca-certificates tzdata ffmpeg openssl su-exec \
@@ -94,3 +103,19 @@ EXPOSE 2398 2400 2401 2599 12399/udp 12400/udp
 
 ENTRYPOINT ["/usr/local/bin/telesrv-container-entrypoint"]
 CMD ["telesrv"]
+
+FROM ${ALPINE_IMAGE} AS admin
+
+RUN apk add --no-cache ca-certificates tzdata su-exec \
+    && addgroup -S -g 10001 telesrv \
+    && adduser -S -D -H -u 10001 -G telesrv telesrv \
+    && install -d -o telesrv -g telesrv -m 0750 /app /var/lib/telesrv/identity
+
+COPY --from=build-admin /out/telesrv-admin /usr/local/bin/telesrv-admin
+COPY --chmod=0555 docker-entrypoint.sh /usr/local/bin/telesrv-container-entrypoint
+
+WORKDIR /app
+USER root
+EXPOSE 2600
+ENTRYPOINT ["/usr/local/bin/telesrv-container-entrypoint"]
+CMD ["telesrv-admin"]
