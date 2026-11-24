@@ -23,6 +23,10 @@ COPY patches/advertise-port.patch /tmp/advertise-port.patch
 RUN git apply --check /tmp/advertise-port.patch \
     && git apply /tmp/advertise-port.patch
 
+COPY patches/admin-emoji-system-packs.patch /tmp/admin-emoji-system-packs.patch
+RUN git apply --check /tmp/admin-emoji-system-packs.patch \
+    && git apply /tmp/admin-emoji-system-packs.patch
+
 # Fetch the official star-gift snapshot separately: the pinned gramsrv source
 # commit contains the catalog reader but intentionally does not vendor the
 # large, periodically refreshed official-gifts data directory.
