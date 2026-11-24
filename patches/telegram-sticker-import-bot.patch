@@ -1,0 +1,12 @@
+diff --git a/cmd/telesrv/main.go b/cmd/telesrv/main.go
+--- a/cmd/telesrv/main.go
++++ b/cmd/telesrv/main.go
+@@ -1064,6 +1064,7 @@
+ 		filesapp.WithMapboxMapTiles(cfg.MapboxToken, cfg.MapTileCacheDir),
+ 		externalMediaOption(cfg),
+ 		webPagePreviewOption(cfg),
+ 	)
++	filesService.StartTelegramStickerImportBot(ctx, logger.Named("telegram-sticker-import-bot"))
+ 	if cfg.MapboxToken != "" {
+ 		logger.Info("map thumbnail proxy enabled", zap.String("provider", "mapbox"), zap.String("cache_dir", cfg.MapTileCacheDir))
+ 	}
