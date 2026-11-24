@@ -73,6 +73,17 @@ func (s *Service) ImportTelegramStickerSet(ctx context.Context, shortName string
 	if !validTelegramStickerShortName(shortName) {
 		return domain.StickerSet{}, nil, false, nil
 	}
+	if s != nil {
+		existing, documents, found, err := s.ResolveStickerSet(ctx, domain.StickerSetRef{
+			Kind: domain.StickerSetRefByShortName, ShortName: shortName,
+		})
+		if err != nil {
+			return domain.StickerSet{}, nil, false, fmt.Errorf("check existing VOLTRA sticker set: %w", err)
+		}
+		if found && !existing.Deleted {
+			return existing, documents, false, nil
+		}
+	}
 
 	token := strings.TrimSpace(os.Getenv("TELESRV_TELEGRAM_STICKER_IMPORT_BOT_TOKEN"))
 	if token == "" {
