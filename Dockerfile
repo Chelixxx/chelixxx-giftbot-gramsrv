@@ -33,6 +33,16 @@ RUN git clone --depth=1 --filter=blob:none --sparse https://github.com/FromGram/
     && test -s /src/data/official-gifts/manifest.json \
     && rm -rf /tmp/fromgram
 
+# Bundle Telegram's default/featured sticker, custom-emoji, and reaction seed
+# data. The upstream server imports it idempotently into PostgreSQL/blob storage
+# at startup through TELESRV_STICKER_SEED_DIR.
+RUN git clone --depth=1 --filter=blob:none --sparse https://github.com/owpengram/owpengram-server.git /tmp/owpengram \
+    && git -C /tmp/owpengram sparse-checkout set data/sticker-seed \
+    && cp -a /tmp/owpengram/data/sticker-seed /src/data/sticker-seed \
+    && test -d /src/data/sticker-seed/telegram_default_stickers_export \
+    && test -d /src/data/sticker-seed/telegram_reactions_export \
+    && rm -rf /tmp/owpengram
+
 ENV CGO_ENABLED=0
 RUN go mod download
 
@@ -60,6 +70,7 @@ RUN apk add --no-cache ca-certificates tzdata ffmpeg openssl su-exec \
 COPY --from=build /out/telesrv /usr/local/bin/telesrv
 COPY --from=build --chown=telesrv:telesrv /src/data/langpack/ /usr/share/telesrv/langpack/
 COPY --from=build --chown=telesrv:telesrv /src/data/official-gifts/ /app/official-gifts/
+COPY --from=build --chown=telesrv:telesrv /src/data/sticker-seed/ /app/sticker-seed/
 COPY --chmod=0555 docker-entrypoint.sh /usr/local/bin/telesrv-container-entrypoint
 
 WORKDIR /app
@@ -69,7 +80,8 @@ ENV TELESRV_RSA_KEY=/var/lib/telesrv/server_rsa.pem \
     TELESRV_BLOB_STAGING_DIR=/var/lib/telesrv/blob-staging \
     TELESRV_IDENTITY_DIR=/var/lib/telesrv/identity \
     TELESRV_MAPTILE_CACHE_DIR=/var/lib/telesrv/maptiles \
-    TELESRV_OFFICIAL_GIFTS_DIR=/app/official-gifts
+    TELESRV_OFFICIAL_GIFTS_DIR=/app/official-gifts \\
+    TELESRV_STICKER_SEED_DIR=/app/sticker-seed
 
 # The entrypoint fixes mounted volume ownership, then drops privileges.
 USER root
