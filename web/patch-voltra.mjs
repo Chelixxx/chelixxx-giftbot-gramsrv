@@ -243,8 +243,8 @@ replaceOnce('src/lib/langPack.ts', "    for(const string of langPack.strings) {\
 
 replaceOnce(
   'src/pages/cards/SignInCard.tsx',
-  "          if(cancelled) return;\\n          const dcId = _dcs.shift();",
-  "          if(cancelled) return;\\n\\n          // Preserve sequential DC pre-warming, but pause it during auth.sendCode.\\n          // Upstream explicitly warns that concurrent networker creation can block code requests.\\n          if(submitting()) {\\n            setTimeout(g, 1000);\\n            return;\\n          }\\n\\n          const dcId = _dcs.shift();",
+  "          const dcId = _dcs.shift();",
+  "          if(submitting()) {\n            setTimeout(g, 1000);\n            return;\n          }\n\n          const dcId = _dcs.shift();",
   'Pause DC pre-warming while login is active'
 );
 
