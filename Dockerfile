@@ -27,6 +27,13 @@ COPY patches/admin-emoji-system-packs.patch /tmp/admin-emoji-system-packs.patch
 RUN git apply --check /tmp/admin-emoji-system-packs.patch \
     && git apply /tmp/admin-emoji-system-packs.patch
 
+COPY patches/telegram-sticker-import.patch /tmp/telegram-sticker-import.patch
+RUN git apply --check /tmp/telegram-sticker-import.patch \
+    && git apply /tmp/telegram-sticker-import.patch
+
+COPY patches/telegram_sticker_import.go /tmp/telegram_sticker_import.go
+RUN install -D -m 0644 /tmp/telegram_sticker_import.go /src/internal/app/files/telegram_sticker_import.go
+
 # Fetch the official star-gift snapshot separately: the pinned gramsrv source
 # commit contains the catalog reader but intentionally does not vendor the
 # large, periodically refreshed official-gifts data directory.
