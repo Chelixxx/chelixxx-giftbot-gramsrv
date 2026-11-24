@@ -1,7 +1,7 @@
 diff --git a/cmd/telesrv-admin/readstore.go b/cmd/telesrv-admin/readstore.go
 --- a/cmd/telesrv-admin/readstore.go
 +++ b/cmd/telesrv-admin/readstore.go
-@@ -1529,4 +1529,22 @@
+@@ -1529,4 +1529,23 @@
  FROM sticker_sets
 -WHERE deleted = false AND set_kind <> 'system'
 -  AND ($1 = '' OR set_kind = $1)
