@@ -37,6 +37,24 @@ const newHttp = "    const httpPromise = deferredPromise<boolean>();\n" +
 "    }";
 replaceOnce('src/lib/mtproto/transports/controller.ts', oldHttp, newHttp, 'HTTP transport guard');
 
+const oldTelegramURLDecl = "  let tgMeMatch, telescoPeMatch, tgMatch;";
+const newTelegramURLDecl = "  let tgMeMatch, telescoPeMatch, tgMatch, telegramPackMatch;";
+replaceOnce('src/lib/richTextProcessor/wrapUrl.ts', oldTelegramURLDecl, newTelegramURLDecl, 'Recognize Telegram sticker links');
+
+const oldTelescoPeBranch = String.raw`} else if((telescoPeMatch = url.match(/^(?:https?:\\/\\/)?telesco\\.pe\\/([^/?]+)\\/(\\d+)/))) {`;
+const newTelescoPeBranch = String.raw`} else if((telegramPackMatch = url.match(/^(?:https?:\\/\\/)?(?:www\\.)?(?:t\\.me|telegram\\.me)\\/(addstickers|addemoji)\\/([A-Za-z0-9_]+)/i))) {
+    onclick = telegramPackMatch[1].toLowerCase() as any;
+  } else if((telescoPeMatch = url.match(/^(?:https?:\\/\\/)?telesco\\.pe\\/([^/?]+)\\/(\\d+)/))) {`;
+replaceOnce('src/lib/richTextProcessor/wrapUrl.ts', oldTelescoPeBranch, newTelescoPeBranch, 'Open original Telegram sticker and emoji links inside VOLTRA');
+
+replaceOnce(
+  'src/components/popups/stickers.tsx',
+  "const prefix = `https://telesrv.net/${isEmojis ? 'addemoji' : 'addstickers'}/`;",
+  "const prefix = `https://t.me/${isEmojis ? 'addemoji' : 'addstickers'}/`;",
+  'Copy original Telegram sticker and emoji links'
+);
+
+
 const oldSocket = "    const websocketPromise = deferredPromise<boolean>();\n" +
 "    const socket = transports.websocket as TcpObfuscated;\n" +
 "    socket.setAutoReconnect(false);\n" +
