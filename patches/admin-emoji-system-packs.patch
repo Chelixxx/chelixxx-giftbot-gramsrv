@@ -1,0 +1,38 @@
+diff --git a/cmd/telesrv-admin/readstore.go b/cmd/telesrv-admin/readstore.go
+index 0000000..0000000 100644
+--- a/cmd/telesrv-admin/readstore.go
++++ b/cmd/telesrv-admin/readstore.go
+@@ -1516,7 +1516,10 @@
+-// ListStickerSets lists non-system sticker/emoji sets. An empty kind lists all
+-// non-system kinds; "system" packs stay hidden because dice/default/internal
+-// resources are not hand-edited from this page.
++// ListStickerSets lists non-system sticker/emoji sets. The emoji catalog also
++// exposes the built-in custom-emoji system sets so operators can inspect the
++// full imported emoji seed; unrelated internal system sets remain hidden.
+ func (s *readStore) ListStickerSets(ctx context.Context, kind string) ([]StickerSetRow, error) {
+@@ -1526,8 +1529,16 @@
+ FROM sticker_sets
+-WHERE deleted = false AND set_kind <> 'system'
+-  AND ($1 = '' OR set_kind = $1)
++WHERE deleted = false
++  AND (
++    set_kind <> 'system'
++    OR ($1 = 'emoji' AND system_key IN (
++      'animated_emoji',
++      'animated_emoji_animations',
++      'emoji_generic_animations',
++      'emoji_default_statuses',
++      'emoji_default_topic_icons'
++    ))
++  )
++  AND (
++    $1 = '' OR set_kind = $1
++    OR ($1 = 'emoji' AND system_key IN (
++      'animated_emoji',
++      'animated_emoji_animations',
++      'emoji_generic_animations',
++      'emoji_default_statuses',
++      'emoji_default_topic_icons'
++    ))
++  )
+ ORDER BY set_kind, sort_order, id`, kind)
