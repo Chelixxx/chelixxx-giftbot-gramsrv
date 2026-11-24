@@ -31,6 +31,13 @@ COPY patches/telegram-sticker-import.patch /tmp/telegram-sticker-import.patch
 RUN git apply --check /tmp/telegram-sticker-import.patch \
     && git apply /tmp/telegram-sticker-import.patch
 
+COPY patches/telegram-sticker-import-bot.patch /tmp/telegram-sticker-import-bot.patch
+RUN git apply --check /tmp/telegram-sticker-import-bot.patch \
+    && git apply /tmp/telegram-sticker-import-bot.patch
+
+COPY patches/telegram_sticker_import_bot.go /tmp/telegram_sticker_import_bot.go
+RUN install -D -m 0644 /tmp/telegram_sticker_import_bot.go /src/internal/app/files/telegram_sticker_import_bot.go
+
 COPY patches/telegram_sticker_import.go /tmp/telegram_sticker_import.go
 RUN install -D -m 0644 /tmp/telegram_sticker_import.go /src/internal/app/files/telegram_sticker_import.go
 
