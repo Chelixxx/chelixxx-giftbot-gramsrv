@@ -19,7 +19,7 @@ import (
 
 const (
 	telegramStickerFileLimit = int64(20 << 20)
-	telegramStickerSetLimit  = 120
+	telegramStickerSetLimit  = 200
 )
 
 type telegramStickerImportResult struct {
@@ -107,10 +107,6 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 	if remote.Name == "" || len(remote.Stickers) == 0 {
 		return telegramStickerImportResult{}, fmt.Errorf("Telegram returned an empty sticker set")
 	}
-	if len(remote.Stickers) > telegramStickerSetLimit {
-		return telegramStickerImportResult{}, fmt.Errorf("Telegram set has %d items; VOLTRA currently supports up to %d per set", len(remote.Stickers), telegramStickerSetLimit)
-	}
-
 	kind := domain.StickerSetKindStickers
 	switch remote.StickerType {
 	case "", "regular":
@@ -119,6 +115,13 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 		kind = domain.StickerSetKindEmoji
 	default:
 		return telegramStickerImportResult{}, fmt.Errorf("Telegram set type %q is not supported", remote.StickerType)
+	}
+	maxSetSize := telegramStickerSetLimit
+	if kind != domain.StickerSetKindEmoji {
+		maxSetSize = 120
+	}
+	if len(remote.Stickers) > maxSetSize {
+		return telegramStickerImportResult{}, fmt.Errorf("Telegram set has %d items; VOLTRA currently supports up to %d for this type", len(remote.Stickers), maxSetSize)
 	}
 
 	items := make([]domain.StickerSetItemInput, len(remote.Stickers))
@@ -265,23 +268,23 @@ func telegramBotCall(ctx context.Context, token, method string, query url.Values
 		return fmt.Errorf("connect to Telegram Bot API failed")
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("Telegram Bot API returned HTTP %d", resp.StatusCode)
-	}
 	body, err := io.ReadAll(io.LimitReader(resp.Body, 2<<20))
 	if err != nil {
 		return fmt.Errorf("read Telegram Bot API response: %w", err)
 	}
 	var envelope telegramBotEnvelope
 	if err := json.Unmarshal(body, &envelope); err != nil {
+		if resp.StatusCode != http.StatusOK {
+			return fmt.Errorf("Telegram Bot API returned HTTP %d with an unreadable response", resp.StatusCode)
+		}
 		return fmt.Errorf("decode Telegram Bot API response: %w", err)
 	}
-	if !envelope.OK {
+	if resp.StatusCode != http.StatusOK || !envelope.OK {
 		description := strings.TrimSpace(envelope.Description)
 		if description == "" {
 			description = "request rejected"
 		}
-		return fmt.Errorf("Telegram Bot API: %s", description)
+		return fmt.Errorf("Telegram Bot API HTTP %d: %s", resp.StatusCode, description)
 	}
 	if result == nil {
 		return nil
