@@ -12,15 +12,15 @@ import (
 )
 
 type telegramStickerBotUpdate struct {
- UpdateID int64 "json:\"update_id\""
- Message *telegramStickerBotMessage "json:\"message\""
+ UpdateID int64 `json:"update_id"`
+ Message *telegramStickerBotMessage `json:"message"`
 }
 type telegramStickerBotMessage struct {
- Text string "json:\"text\""
- From struct { ID int64 "json:\"id\"" } "json:\"from\""
- Chat struct { ID int64 "json:\"id\""; Type string "json:\"type\"" } "json:\"chat\""
+ Text string `json:"text"`
+ From struct { ID int64 `json:"id"` } `json:"from"`
+ Chat struct { ID int64 `json:"id"`; Type string `json:"type"` } "json:\"chat\""
 }
-type telegramStickerBotWebhook struct { URL string "json:\"url\"" }
+type telegramStickerBotWebhook struct { URL string `json:"url"` }
 
 func (s *Service) StartTelegramStickerImportBot(ctx context.Context, logger *zap.Logger) {
  if s == nil { return }
