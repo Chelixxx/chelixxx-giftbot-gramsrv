@@ -237,6 +237,60 @@ replaceOnce('src/lib/appManagers/appUsersManager.ts', "    user.pFlags ??= {};\n
 const runtimeLoop = "    for(const original of langPack.strings) {\n      const string: any = {...original};\n      for(const key of ['value', 'zero_value', 'one_value', 'two_value', 'few_value', 'many_value', 'other_value']) {\n        if(typeof string[key] === 'string') string[key] = rebrandVisibleText(string[key]);\n      }\n      if(langPack.lang_code === 'ru' && string._ === 'langPackString' && VOLTRA_RU_OVERRIDES[string.key]) {\n        string.value = VOLTRA_RU_OVERRIDES[string.key];\n      }\n      strings.set(string.key as LangPackKey, string);\n    }";
 replaceOnce('src/lib/langPack.ts', "    for(const string of langPack.strings) {\n      strings.set(string.key as LangPackKey, string);\n    }", runtimeLoop, 'Rebrand Russian and cached language-pack strings');
 
+
+const oldSignInWarmup = [
+  "      const langPack = commonStateStorage.getFromCache('langPack');",
+  "      if(langPack && !langPack.countries?.hash) {",
+  "        I18n.getLangPackAndApply(langPack.lang_code).then(() => {",
+  "          if(!cancelled) telInputField.simulateInputEvent();",
+  "        });",
+  "      }",
+  "",
+  "      const dcs = new Set([1, 2, 3, 4, 5]);",
+  "      const done: number[] = [nearestDcResult.this_dc];",
+  "",
+  "      let promise: Promise<any>;",
+  "      if(nearestDcResult.nearest_dc !== nearestDcResult.this_dc) {",
+  "        promise = managers.apiManager.getNetworkerVoid(nearestDcResult.nearest_dc).then(() => {",
+  "          done.push(nearestDcResult.nearest_dc);",
+  "        });",
+  "      }",
+  "",
+  "      (promise || Promise.resolve()).then(() => {",
+  "        if(cancelled) return;",
+  "",
+  "        done.forEach((dcId) => dcs.delete(dcId));",
+  "",
+  "        const _dcs = [...dcs];",
+  "        const g = async(): Promise<void> => {",
+  "          if(cancelled) return;",
+  "          const dcId = _dcs.shift();",
+  "          if(!dcId) return;",
+  "",
+  "          const accountData = await AccountController.get(getCurrentAccount());",
+  "          const key = accountData[`dc${dcId as TrueDcId}_auth_key`];",
+  "",
+  "          if(key) return g();",
+  "",
+  "          // ! если одновременно запросить все нетворкеры, не будет проходить запрос на код",
+  "          setTimeout(() => {",
+  "            if(cancelled) return;",
+  "            managers.apiManager.getNetworkerVoid(dcId).finally(g);",
+  "          }, 3000);",
+  "        };",
+  "",
+  "        g();",
+  "      });",
+  ""
+].join("\n");
+replaceOnce(
+  'src/pages/cards/SignInCard.tsx',
+  oldSignInWarmup,
+  "      // VOLTRA: do not pre-open other DC networkers on the sign-in screen.\n" +
+  "      // They can stall auth.sendCode while the client is still connecting.\n",
+  'Remove competing sign-in language/DC warm-up requests'
+);
+
 replaceOnce("index.html", "<html lang=\"en\">", "<html lang=\"ru\">", "Set HTML lang to ru");
 for(const file of ['public/site.webmanifest', 'public/site_apple.webmanifest']) {
   const filePath = path.join(root, file);
