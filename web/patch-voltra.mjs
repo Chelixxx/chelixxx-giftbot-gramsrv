@@ -238,73 +238,8 @@ const runtimeLoop = "    for(const original of langPack.strings) {\n      const 
 replaceOnce('src/lib/langPack.ts', "    for(const string of langPack.strings) {\n      strings.set(string.key as LangPackKey, string);\n    }", runtimeLoop, 'Rebrand Russian and cached language-pack strings');
 
 
-const oldSignInWarmup = [
-  "      const langPack = commonStateStorage.getFromCache('langPack');",
-  "      if(langPack && !langPack.countries?.hash) {",
-  "        I18n.getLangPackAndApply(langPack.lang_code).then(() => {",
-  "          if(!cancelled) telInputField.simulateInputEvent();",
-  "        });",
-  "      }",
-  "",
-  "      const dcs = new Set([1, 2, 3, 4, 5]);",
-  "      const done: number[] = [nearestDcResult.this_dc];",
-  "",
-  "      let promise: Promise<any>;",
-  "      if(nearestDcResult.nearest_dc !== nearestDcResult.this_dc) {",
-  "        promise = new Promise<void>((resolve) => {",
-  "          const warmNearest = () => {",
-  "            if(cancelled) return resolve();",
-  "            if(submitting()) {",
-  "              setTimeout(warmNearest, 3000);",
-  "              return;",
-  "            }",
-  "            managers.apiManager.getNetworkerVoid(nearestDcResult.nearest_dc).then(() => {",
-  "              done.push(nearestDcResult.nearest_dc);",
-  "              resolve();",
-  "            }, resolve);",
-  "          };",
-  "          warmNearest();",
-  "        });",
-  "      }",
-  "",
-  "      (promise || Promise.resolve()).then(() => {",
-  "        if(cancelled) return;",
-  "        done.forEach((dcId) => dcs.delete(dcId));",
-  "        const _dcs = [...dcs];",
-  "        const g = async(): Promise<void> => {",
-  "          if(cancelled) return;",
-  "          const dcId = _dcs.shift();",
-  "          if(!dcId) return;",
-  "          if(submitting()) {",
-  "            _dcs.unshift(dcId);",
-  "            setTimeout(g, 3000);",
-  "            return;",
-  "          }",
-  "          const accountData = await AccountController.get(getCurrentAccount());",
-  "          const key = accountData[`dc${dcId as TrueDcId}_auth_key`];",
-  "          if(key) return g();",
-  "          // Warm DCs sequentially; never compete with the active login request.",
-  "          setTimeout(() => {",
-  "            if(cancelled) return;",
-  "            if(submitting()) {",
-  "              _dcs.unshift(dcId);",
-  "              setTimeout(g, 3000);",
-  "              return;",
-  "            }",
-  "            managers.apiManager.getNetworkerVoid(dcId).finally(g);",
-  "          }, 3000);",
-  "        };",
-  "        g();",
-  "      });",
-  ""
-].join("\n");
-replaceOnce(
-  'src/pages/cards/SignInCard.tsx',
-  oldSignInWarmup,
-  "      // Restore sequential DC pre-warming, pausing whenever a login request is active.\n" +
-  "      // This keeps other data centers ready without competing with auth.sendCode.\n",
-  'Restore safe sequential sign-in DC pre-warming'
-);
+// The pinned upstream SignInCard already contains the sequential DC pre-warm cascade.
+// Keep it intact; the timeout below prevents the login button from spinning forever.
 
 // Do not leave the login button spinning forever if a transport response is lost.
 replaceOnce(
