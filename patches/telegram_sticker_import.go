@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"time"
@@ -135,6 +136,21 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 		return telegramStickerImportResult{}, fmt.Errorf("Telegram set has %d items; VOLTRA currently supports up to %d for this type", len(remote.Stickers), maxSetSize)
 	}
 
+	// Keep a human-readable copy on the Railway persistent volume as well as
+	// the canonical blob-store/DB import used by VOLTRA clients.
+	exportRoot := strings.TrimSpace(os.Getenv("TELESRV_STICKER_IMPORT_EXPORT_DIR"))
+	if exportRoot == "" {
+		exportRoot = "/var/lib/telesrv/imported-stickers"
+	}
+	exportKind := "stickers"
+	if kind == domain.StickerSetKindEmoji {
+		exportKind = "emoji"
+	}
+	packExportDir := filepath.Join(exportRoot, exportKind, shortName)
+	if err := os.MkdirAll(packExportDir, 0750); err != nil {
+		return telegramStickerImportResult{}, fmt.Errorf("create VOLTRA sticker export folder: %w", err)
+	}
+
 	items := make([]domain.StickerSetItemInput, len(remote.Stickers))
 	var firstErr error
 	var firstErrOnce sync.Once
@@ -161,6 +177,11 @@ func (s *Service) importTelegramStickerSet(ctx context.Context, token, shortName
 			doc, err := s.AdminUploadStickerMaterial(ctx, fmt.Sprintf("telegram_%03d.%s", i+1, extension), data)
 			if err != nil {
 				firstErrOnce.Do(func() { firstErr = fmt.Errorf("store Telegram sticker %d: %w", i+1, err) })
+				return
+			}
+			exportName := filepath.Join(packExportDir, fmt.Sprintf("%03d.%s", i+1, extension))
+			if err := os.WriteFile(exportName, data, 0640); err != nil {
+				firstErrOnce.Do(func() { firstErr = fmt.Errorf("export Telegram sticker %d to persistent folder: %w", i+1, err) })
 				return
 			}
 			if extension == "webm" {
