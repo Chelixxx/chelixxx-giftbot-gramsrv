@@ -241,6 +241,13 @@ replaceOnce('src/lib/langPack.ts', "    for(const string of langPack.strings) {\
 // The pinned upstream SignInCard already contains the sequential DC pre-warm cascade.
 // Keep it intact; the timeout below prevents the login button from spinning forever.
 
+replaceOnce(
+  'src/pages/cards/SignInCard.tsx',
+  "          if(cancelled) return;\\n          const dcId = _dcs.shift();",
+  "          if(cancelled) return;\\n\\n          // Preserve sequential DC pre-warming, but pause it during auth.sendCode.\\n          // Upstream explicitly warns that concurrent networker creation can block code requests.\\n          if(submitting()) {\\n            setTimeout(g, 1000);\\n            return;\\n          }\\n\\n          const dcId = _dcs.shift();",
+  'Pause DC pre-warming while login is active'
+);
+
 // Do not leave the login button spinning forever if a transport response is lost.
 replaceOnce(
   'src/pages/cards/SignInCard.tsx',
