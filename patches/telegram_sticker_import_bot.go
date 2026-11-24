@@ -12,15 +12,15 @@ import (
 )
 
 type telegramStickerBotUpdate struct {
- UpdateID int64 @@json:"update_id"@@
- Message *telegramStickerBotMessage @@json:"message"@@
+ UpdateID int64 "json:\"update_id\""
+ Message *telegramStickerBotMessage "json:\"message\""
 }
 type telegramStickerBotMessage struct {
- Text string @@json:"text"@@
- From struct { ID int64 @@json:"id"@@ } @@json:"from"@@
- Chat struct { ID int64 @@json:"id"@@; Type string @@json:"type"@@ } @@json:"chat"@@
+ Text string "json:\"text\""
+ From struct { ID int64 "json:\"id\"" } "json:\"from\""
+ Chat struct { ID int64 "json:\"id\""; Type string "json:\"type\"" } "json:\"chat\""
 }
-type telegramStickerBotWebhook struct { URL string @@json:"url"@@ }
+type telegramStickerBotWebhook struct { URL string "json:\"url\"" }
 
 func (s *Service) StartTelegramStickerImportBot(ctx context.Context, logger *zap.Logger) {
  if s == nil { return }
@@ -79,7 +79,7 @@ func (s *Service) runTelegramStickerImportBot(ctx context.Context, token string,
 
 func telegramStickerSetFromText(text string) (string, string, bool) {
  for _, field := range strings.Fields(text) {
-  candidate := strings.Trim(field, "<>()[]{}.,;!?"+` + "'" + `)
+  candidate := strings.Trim(field, "<>()[]{}.,;!?\\\"'")
   if !strings.Contains(candidate, "://") { candidate = "https://" + strings.TrimPrefix(candidate, "@") }
   parsed, err := url.Parse(candidate); if err != nil { continue }
   host := strings.ToLower(strings.TrimPrefix(parsed.Hostname(), "www."))
