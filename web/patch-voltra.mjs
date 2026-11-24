@@ -282,12 +282,12 @@ const oldSignInWarmup = [
   "        g();",
   "      });",
   ""
-].join("\\n");
+].join("\n");
 replaceOnce(
   'src/pages/cards/SignInCard.tsx',
   oldSignInWarmup,
-  "      // VOLTRA: do not pre-open other DC networkers on the sign-in screen.\\n" +
-  "      // They can stall auth.sendCode while the client is still connecting.\\n",
+  "      // VOLTRA: do not pre-open other DC networkers on the sign-in screen.\n" +
+  "      // They can stall auth.sendCode while the client is still connecting.\n",
   'Remove competing sign-in language/DC warm-up requests'
 );
 
