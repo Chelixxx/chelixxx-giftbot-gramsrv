@@ -82,7 +82,19 @@ func telegramStickerSetFromText(text string) (string, string, bool) {
   candidate := strings.Trim(field, "<>()[]{}.,;!?\\\"'")
   if !strings.Contains(candidate, "://") { candidate = "https://" + strings.TrimPrefix(candidate, "@") }
   parsed, err := url.Parse(candidate); if err != nil { continue }
+  scheme := strings.ToLower(parsed.Scheme)
   host := strings.ToLower(strings.TrimPrefix(parsed.Hostname(), "www."))
+  if scheme == "tg" {
+   kind := ""
+   switch host {
+   case "addstickers": kind = "стикеры"
+   case "addemoji": kind = "эмодзи"
+   default: continue
+   }
+   shortName := parsed.Query().Get("set")
+   if validTelegramStickerShortName(shortName) { return shortName, kind, true }
+   continue
+  }
   if host != "t.me" && host != "telegram.me" { continue }
   parts := strings.Split(strings.Trim(parsed.Path, "/"), "/")
   if len(parts) != 2 { continue }
