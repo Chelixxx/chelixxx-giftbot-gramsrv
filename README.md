@@ -1,5 +1,36 @@
-# VOLTRA Railway server
+# VOLTRA — официальный сайт
 
-This repository builds the VOLTRA-compatible gramsrv server image from a pinned public upstream commit, with a small MTProto advertised-port patch and Railway persistent-volume startup handling.
+Статический лендинг VOLTRA. Вся графика (шесть GIF и два фона) встроена прямо в `index.html`, поэтому отдельная папка `assets` и сборка не требуются.
 
-The Railway service uses this repository's Dockerfile. Mutable RSA identity, media blobs, and server identity files are stored under the mounted `/var/lib/telesrv` volume. The public TCP proxy is configured separately in Railway.
+## Деплой на Layero
+
+1. В Layero создай **новый, отдельный проект**.
+2. Выбери импорт из GitHub.
+3. Репозиторий: `Chelixxx/chelixxx-giftbot-gramsrv`.
+4. Ветка: `voltra-landing`.
+5. Каталог приложения: корень (`/`).
+6. Тип: статический сайт; входной файл: `index.html`.
+7. Запусти Deploy. Layero назначит сайту отдельный адрес `*.layero.app`.
+
+Пуши в ветку `voltra-landing` будут обновлять только лендинг. Основная ветка `main`, сервер и админка не изменяются. В Layero production-веткой следует оставить `voltra-landing` для этого проекта.
+
+## Ссылки
+
+В `index.html` замени `YOUR_APK_LINK` и `YOUR_WEB_LINK` на реальные адреса APK и веб-версии.
+
+## Что работает
+
+- RU / EN / 中文;
+- светлая и тёмная темы;
+- обои меняются вместе с темой;
+- шесть GIF-иллюстраций;
+- промокод на текущую дату Екатеринбурга, обновляется на 00:00 YEKT;
+- адаптация под мобильный экран.
+
+## Важно про промокод
+
+Сейчас код демонстрационный и генерируется в браузере. Он не активируется и не проверяется сервером. Для настоящих промокодов потребуется серверная генерация и проверка в VOLTRA.
+
+## Обои
+
+Тёмный фон — присланные тёмные doodle-обои. Светлый — временный ранее присланный светлый doodle-фон; после того как будет загружен сам Pinterest-файл, его можно заменить.
