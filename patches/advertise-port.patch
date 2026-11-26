@@ -1,0 +1,79 @@
+diff --git a/cmd/telesrv/main.go b/cmd/telesrv/main.go
+index 4488b2d8..99126914 100644
+--- a/cmd/telesrv/main.go
++++ b/cmd/telesrv/main.go
+@@ -703,10 +703,14 @@ func run(logger *zap.Logger) error {
+ 	if err != nil {
+ 		return fmt.Errorf("parse listen addr %q: %w", cfg.ListenAddr, err)
+ 	}
+-	port, err := strconv.Atoi(portStr)
++	listenPort, err := strconv.Atoi(portStr)
+ 	if err != nil {
+ 		return fmt.Errorf("parse listen port %q: %w", portStr, err)
+ 	}
++	advertisePort := cfg.AdvertisePort
++	if advertisePort == 0 {
++		advertisePort = listenPort
++	}
+ 
+ 	// tg.Layer is generated from the currently imported canonical schema; after
+ 	// adopting a future Layer there is no need to maintain a separate constant in telesrv.
+@@ -714,7 +718,7 @@ func run(logger *zap.Logger) error {
+ 		zap.String("listen", cfg.ListenAddr),
+ 		zap.Int("dc", cfg.DC),
+ 		zap.String("default_country_code", cfg.DefaultCountryCode),
+-		zap.String("advertise", net.JoinHostPort(cfg.AdvertiseIP, portStr)),
++		zap.String("advertise", net.JoinHostPort(cfg.AdvertiseIP, strconv.Itoa(advertisePort))),
+ 		zap.Int("tl_layer", tg.Layer),
+ 		zap.String("git_commit", buildMeta.Commit),
+ 		zap.String("git_branch", buildMeta.Branch),
+@@ -1919,7 +1923,7 @@ func run(logger *zap.Logger) error {
+ 		DC:                       cfg.DC,
+ 		DefaultCountryCode:       cfg.DefaultCountryCode,
+ 		IP:                       cfg.AdvertiseIP,
+-		Port:                     port,
++		Port:                     advertisePort,
+ 		OutboundPushTimeout:      cfg.OutboundPushTimeout,
+ 		SendRateLimit:            cfg.SendRateLimit,
+ 		SendRateWindow:           cfg.SendRateWindow,
+@@ -2372,7 +2376,7 @@ func run(logger *zap.Logger) error {
+ 		OnServing: func(_ net.Addr) {
+ 			logger.Info("telesrv server ready",
+ 				zap.String("listen", cfg.ListenAddr),
+-				zap.String("advertise", net.JoinHostPort(cfg.AdvertiseIP, portStr)),
++				zap.String("advertise", net.JoinHostPort(cfg.AdvertiseIP, strconv.Itoa(advertisePort))),
+ 				zap.Int("pid", os.Getpid()),
+ 				zap.String("git_commit", buildMeta.Commit),
+ 				zap.Uint("schema_version", migrationStatus.Version),
+diff --git a/internal/config/config.go b/internal/config/config.go
+index f153878a..296f9eae 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -36,6 +36,8 @@ type Config struct {
+ 	WebSocketAllowedOrigins []string
+ 	// AdvertiseIP is the externally reachable IP written into help.getConfig DCOptions (clients use it to connect to this DC).
+ 	AdvertiseIP string
++	// AdvertisePort is the externally reachable TCP port advertised to MTProto clients; zero follows ListenAddr.
++	AdvertisePort int
+ 	// RSAKeyPath is the PEM path of the server RSA private key; generated automatically when missing.
+ 	RSAKeyPath string
+ 	// DC is this server's DC ID.
+@@ -963,6 +965,10 @@ func Load() (Config, error) {
+ 	if err != nil {
+ 		return Config{}, fmt.Errorf("TELESRV_ADVERTISE_IP: %w", err)
+ 	}
++	advertisePort := envIntOr("TELESRV_ADVERTISE_PORT", 0)
++	if advertisePort < 0 || advertisePort > 65535 {
++		return Config{}, fmt.Errorf("TELESRV_ADVERTISE_PORT must be between 1 and 65535 (or 0 to use TELESRV_LISTEN)")
++	}
+ 	// The composite rating weight defaults are the domain formula's own defaults;
+ 	// see RatingWeight* below.
+ 	defaultRatingWeights := domain.DefaultAccountRatingWeights()
+@@ -1005,6 +1011,7 @@ func Load() (Config, error) {
+ 		// help.getConfig must deliver at least one reconnectable main DC address; a remote deployment must
+ 		// not reuse the loopback default and needs the client's actually reachable IP set explicitly.
+ 		AdvertiseIP:                       advertiseIP,
++		AdvertisePort:                     advertisePort,
+ 		RSAKeyPath:                        envOr("TELESRV_RSA_KEY", "data/server_rsa.pem"),
+ 		DC:                                envIntOr("TELESRV_DC", 2),
+ 		DefaultCountryCode:                countryCode,

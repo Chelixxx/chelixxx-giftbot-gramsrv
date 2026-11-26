@@ -1,0 +1,63 @@
+name: Build and publish VOLTRA server
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - Dockerfile
+      - docker-entrypoint.sh
+      - patches/**
+      - .github/workflows/build-server.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-server:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and publish
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          target: server
+          tags: ghcr.io/chelixxx/voltra-server:main
+          labels: |
+            org.opencontainers.image.source=https://github.com/Chelixxx/chelixxx-giftbot-gramsrv
+            org.opencontainers.image.description=VOLTRA server built from pinned gramsrv source
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Build and publish admin console
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          target: admin
+          platforms: linux/amd64
+          push: true
+          tags: ghcr.io/chelixxx/voltra-admin:main
+          labels: |
+            org.opencontainers.image.source=https://github.com/Chelixxx/chelixxx-giftbot-gramsrv
+            org.opencontainers.image.description=VOLTRA admin console built from pinned gramsrv source
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false

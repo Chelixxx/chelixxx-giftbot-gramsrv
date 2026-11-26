@@ -1,0 +1,8 @@
+{
+  "$schema": "https://layero.ru/schema/layero-v2.json",
+  "framework": "generic",
+  "installCommand": "true",
+  "buildCommand": "bash web/build.sh",
+  "outputDirectory": "web/client/dist",
+  "nodeVersion": "22"
+}
