@@ -354,3 +354,136 @@ replaceOnce(
 );
 
 console.log('VOLTRA RSA, transport, and branding patches applied.');
+
+
+// VOLTRA promo redemption entry in the Star Gift purchase dialog.
+// The signed-in client sends the existing Grammystore /promo_code command from
+// the user's own account; the bot performs the durable claim and Stars grant.
+const promoPopupSource = String.raw\`import PopupElement from '@components/popups/index';
+import InputField from '@components/inputField';
+import rootScope from '@lib/rootScope';
+import appImManager from '@lib/appImManager';
+
+const VOLTRA_PROMO_BOT_USERNAME = 'chelixxxgift_bot';
+
+export default class PopupVoltraPromo extends PopupElement {
+  constructor() {
+    super('popup-peer popup-voltra-promo', {
+      body: true,
+      closable: true,
+      overlayClosable: true,
+      scrollable: true
+    });
+
+    this.title.textContent = 'Промокод VOLTRA';
+
+    const description = document.createElement('p');
+    description.classList.add('popup-description');
+    description.textContent = 'Введите ежедневный промокод. После проверки награда будет начислена на ваш баланс Stars.';
+
+    const input = new InputField({
+      labelText: 'Промокод',
+      maxLength: 32,
+      plainText: true,
+      autocomplete: 'off',
+      withBorder: true
+    });
+
+    const status = document.createElement('p');
+    status.classList.add('popup-description');
+    status.style.minHeight = '1.4em';
+    status.style.marginTop = '8px';
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn-primary btn-color-primary btn-large';
+    button.textContent = 'Активировать';
+
+    button.addEventListener('click', async () => {
+      const code = input.value.trim().toUpperCase();
+      if(!/^[A-Z0-9_-]{3,32}$/.test(code)) {
+        status.textContent = 'Проверьте промокод: используйте 3–32 латинских символа, цифры, дефис или подчёркивание.';
+        input.input.classList.add('error');
+        input.input.focus();
+        return;
+      }
+
+      status.textContent = 'Отправляем промокод на проверку…';
+      button.disabled = true;
+      input.input.classList.remove('error');
+
+      try {
+        const bot = await rootScope.managers.appUsersManager.resolveUserByUsername(VOLTRA_PROMO_BOT_USERNAME);
+        if(!bot || bot._ !== 'user') {
+          throw new Error('Promo bot could not be found');
+        }
+
+        const peerId = bot.id.toPeerId();
+        await appImManager.setPeer({peerId});
+        await rootScope.managers.appMessagesManager.sendText({
+          peerId,
+          text: '/promo_code ' + code,
+          clearDraft: true
+        });
+        this.hide();
+      } catch(error) {
+        console.error('VOLTRA promo redemption handoff failed', error);
+        status.textContent = 'Не удалось отправить промокод. Проверьте соединение и попробуйте ещё раз.';
+        button.disabled = false;
+      }
+    });
+
+    input.input.addEventListener('keydown', (event) => {
+      if(event.key === 'Enter') {
+        event.preventDefault();
+        button.click();
+      }
+    });
+
+    this.body.append(description, input.container, status, button);
+    this.show();
+    input.input.focus();
+  }
+}\`;
+
+const promoPopupPath = path.join(root, 'src/components/popups/voltraPromo.ts');
+fs.writeFileSync(promoPopupPath, promoPopupSource, 'utf8');
+
+replaceOnce(
+  'src/components/popups/sendGift.tsx',
+  "import {unwrap} from 'solid-js/store';",
+  "import {unwrap} from 'solid-js/store';\nimport PopupVoltraPromo from '@components/popups/voltraPromo';",
+  'Add VOLTRA promo redemption popup to gift dialog'
+);
+
+replaceOnce(
+  'src/components/popups/sendGift.tsx',
+  "        <ChipTabs\n          value={category()}\n          onChange={handleCategoryChanged}",
+  "        <div class={styles.voltraPromoAction}>\n" +
+  "          <Button\n" +
+  "            class=\"btn-primary btn-color-primary\"\n" +
+  "            onClick={() => PopupElement.createPopup(PopupVoltraPromo, {}).show()}\n" +
+  "          >\n" +
+  "            🎟 Ввести промокод\n" +
+  "          </Button>\n" +
+  "        </div>\n" +
+  "        <ChipTabs\n" +
+  "          value={category()}\n" +
+  "          onChange={handleCategoryChanged}",
+  'Show VOLTRA promo action in Star Gift purchase menu'
+);
+
+const sendGiftStylesPath = path.join(root, 'src/components/popups/sendGift.module.scss');
+fs.appendFileSync(
+  sendGiftStylesPath,
+  "\n.voltraPromoAction {\n" +
+  "  display: flex;\n" +
+  "  justify-content: center;\n" +
+  "  padding: 12px 16px 4px;\n" +
+  "}\n\n" +
+  ".voltraPromoAction button {\n" +
+  "  width: 100%;\n" +
+  "  max-width: 420px;\n" +
+  "}\n",
+  'utf8'
+);
