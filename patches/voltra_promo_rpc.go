@@ -2,7 +2,10 @@ package rpc
 
 import (
 	"context"
+	"errors"
 	"strings"
+
+	"go.uber.org/zap"
 
 	"github.com/iamxvbaba/td/tg"
 	"github.com/iamxvbaba/td/tgerr"
@@ -55,11 +58,11 @@ func (r *Router) tryRedeemVoltraPromo(ctx context.Context, req *tg.MessagesSendM
 	balance, err := redeemer.RedeemPromo(ctx, userID, fields[1], req.RandomID)
 	switch {
 	case err == nil:
-	case errorsIs(err, domain.ErrStarsPromoInvalid):
+	case errors.Is(err, domain.ErrStarsPromoInvalid):
 		return nil, true, tgerr.New(400, "PROMO_CODE_INVALID")
-	case errorsIs(err, domain.ErrStarsPromoAlreadyUsed):
+	case errors.Is(err, domain.ErrStarsPromoAlreadyUsed):
 		return nil, true, tgerr.New(400, "PROMO_ALREADY_USED")
-	case errorsIs(err, domain.ErrStarsPromoUnavailable):
+	case errors.Is(err, domain.ErrStarsPromoUnavailable):
 		return nil, true, tgerr.New(503, "PROMO_SERVICE_UNAVAILABLE")
 	default:
 		if r.log != nil {
