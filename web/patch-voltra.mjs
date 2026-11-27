@@ -257,7 +257,7 @@ replaceOnce('src/lib/langPack.ts', '  export const countriesList: HelpCountry[] 
 // static thumb, which left an empty tile. Other sticker surfaces keep their defaults.
 replaceOnce(
   'src/components/emoticonsDropdown/tabs/SuperStickerRenderer.ts',
-  '    middleware?: Middleware\\n  ) {',
+  '    middleware?: Middleware\n  ) {',
   '    middleware?: Middleware,\\n    onlyThumbOverride?: boolean\\n  ) {',
   'Allow gift grids to render animated documents'
 );
