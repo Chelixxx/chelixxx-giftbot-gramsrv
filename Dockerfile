@@ -41,6 +41,25 @@ RUN install -D -m 0644 /tmp/telegram_sticker_import_bot.go /src/internal/app/fil
 COPY patches/telegram_sticker_import.go /tmp/telegram_sticker_import.go
 RUN install -D -m 0644 /tmp/telegram_sticker_import.go /src/internal/app/files/telegram_sticker_import.go
 
+# VOLTRA promo redemption: authenticated MTProto self-chat command, shared
+# public registry validation, and atomic per-user Stars ledger credit.
+COPY patches/voltra-promo.patch /tmp/voltra-promo.patch
+RUN git apply --check /tmp/voltra-promo.patch \
+    && git apply /tmp/voltra-promo.patch
+
+COPY patches/voltra_promo_domain.go /tmp/voltra_promo_domain.go
+COPY patches/voltra_promo_service.go /tmp/voltra_promo_service.go
+COPY patches/voltra_promo_store.go /tmp/voltra_promo_store.go
+COPY patches/voltra_promo_rpc.go /tmp/voltra_promo_rpc.go
+COPY patches/20261127010000_voltra_promo_claims.up.sql /tmp/20261127010000_voltra_promo_claims.up.sql
+COPY patches/20261127010000_voltra_promo_claims.down.sql /tmp/20261127010000_voltra_promo_claims.down.sql
+RUN install -D -m 0644 /tmp/voltra_promo_domain.go /src/internal/domain/voltra_promo.go \
+    && install -D -m 0644 /tmp/voltra_promo_service.go /src/internal/app/stars/voltra_promo.go \
+    && install -D -m 0644 /tmp/voltra_promo_store.go /src/internal/store/postgres/voltra_promo.go \
+    && install -D -m 0644 /tmp/voltra_promo_rpc.go /src/internal/rpc/voltra_promo.go \
+    && install -D -m 0644 /tmp/20261127010000_voltra_promo_claims.up.sql /src/deploy/migrations/20261127010000_voltra_promo_claims.up.sql \
+    && install -D -m 0644 /tmp/20261127010000_voltra_promo_claims.down.sql /src/deploy/migrations/20261127010000_voltra_promo_claims.down.sql
+
 # Fetch the official star-gift snapshot separately: the pinned gramsrv source
 # commit contains the catalog reader but intentionally does not vendor the
 # large, periodically refreshed official-gifts data directory.
