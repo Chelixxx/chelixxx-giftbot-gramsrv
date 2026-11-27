@@ -1,7 +1,7 @@
 diff --git a/internal/rpc/messages_register.go b/internal/rpc/messages_register.go
 --- a/internal/rpc/messages_register.go
 +++ b/internal/rpc/messages_register.go
-@@ -92,3 +92,6 @@
+@@ -93,3 +93,6 @@
  	registerRPC[*tg.MessagesSendMessageRequest](d, tlprofile.SemanticMethodMessagesSendMessage, func(ctx context.Context, layerRequest *tg.MessagesSendMessageRequest) (any, error) {
 +		if updates, handled, err := r.tryRedeemVoltraPromo(ctx, layerRequest); handled || err != nil {
 +			return updates, err
