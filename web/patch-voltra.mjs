@@ -462,7 +462,7 @@ replaceOnce(
   "        <div class={styles.voltraPromoAction}>\n" +
   "          <Button\n" +
   "            class=\"btn-primary btn-color-primary\"\n" +
-  "            onClick={() => PopupElement.createPopup(PopupVoltraPromo, {}).show()}\n" +
+  "            onClick={() => PopupElement.createPopup(PopupVoltraPromo, {})}\n" +
   "          >\n" +
   "            🎟 Ввести промокод\n" +
   "          </Button>\n" +
