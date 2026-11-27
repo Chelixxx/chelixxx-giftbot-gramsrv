@@ -258,7 +258,7 @@ replaceOnce('src/lib/langPack.ts', '  export const countriesList: HelpCountry[] 
 replaceOnce(
   'src/components/emoticonsDropdown/tabs/SuperStickerRenderer.ts',
   '    middleware?: Middleware\n  ) {',
-  '    middleware?: Middleware,\\n    onlyThumbOverride?: boolean\\n  ) {',
+  '    middleware?: Middleware,\n    onlyThumbOverride?: boolean\n  ) {',
   'Allow gift grids to render animated documents'
 );
 replaceOnce(
