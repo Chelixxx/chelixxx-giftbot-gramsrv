@@ -359,7 +359,7 @@ console.log('VOLTRA RSA, transport, and branding patches applied.');
 // VOLTRA promo redemption entry in the Star Gift purchase dialog.
 // The signed-in client sends the existing Grammystore /promo_code command from
 // the user's own account; the bot performs the durable claim and Stars grant.
-const promoPopupSource = String.raw\`import PopupElement from '@components/popups/index';
+const promoPopupSource = String.raw`import PopupElement from '@components/popups/index';
 import InputField from '@components/inputField';
 import rootScope from '@lib/rootScope';
 import appImManager from '@lib/appImManager';
@@ -444,7 +444,7 @@ export default class PopupVoltraPromo extends PopupElement {
     this.show();
     input.input.focus();
   }
-}\`;
+}`;
 
 const promoPopupPath = path.join(root, 'src/components/popups/voltraPromo.ts');
 fs.writeFileSync(promoPopupPath, promoPopupSource, 'utf8');
