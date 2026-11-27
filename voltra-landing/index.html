@@ -205,11 +205,32 @@
  const themeBtn=root.querySelector('#vl-theme');let theme='light';try{theme=localStorage.getItem('voltra-theme')||'light'}catch(e){}
  function setTheme(v){theme=v==='dark'?'dark':'light';root.dataset.theme=theme;themeBtn.textContent=theme==='dark'?'☀':'☾';try{localStorage.setItem('voltra-theme',theme)}catch(e){}}
  setTheme(theme);themeBtn.addEventListener('click',()=>setTheme(theme==='dark'?'light':'dark'));
- // Display-only daily code. Production redemption/validation must be moved to the VOLTRA server.
- function yektDay(){const a=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Yekaterinburg',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const g=t=>a.find(x=>x.type===t).value;return g('year')+g('month')+g('day')}
- function codeFor(day){let n=2166136261;const s='VOLTRA_DAILY_'+day;for(let i=0;i<s.length;i++){n^=s.charCodeAt(i);n=Math.imul(n,16777619)}let out='';const abc='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';for(let i=0;i<8;i++){n^=n<<13;n^=n>>>17;n^=n<<5;out+=abc[(n>>>0)%abc.length]}return 'VOLTRA-'+out}
- function refreshCode(){const d=yektDay();root.querySelector('#vl-code').textContent=codeFor(d)}refreshCode();setInterval(refreshCode,15000);
- root.querySelector('#vl-copy').addEventListener('click',async()=>{const val=root.querySelector('#vl-code').textContent;try{await navigator.clipboard.writeText(val);const b=root.querySelector('#vl-copy');b.textContent=dict[lang].copied;setTimeout(()=>b.textContent=dict[lang].copy,1400)}catch(e){}});
+ // Public GitHub promo registry: only today's entry is shown in the page UI.
+ function yektDate(){const a=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Yekaterinburg',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date());const g=t=>a.find(x=>x.type===t).value;return g('year')+'-'+g('month')+'-'+g('day')}
+ const promoCodeEl=root.querySelector('#vl-code');
+ const promoCopyBtn=root.querySelector('#vl-copy');
+ promoCopyBtn.disabled=true;
+ let displayedPromo=null;
+ async function refreshCode(){
+   const today=yektDate();
+   try{
+     const response=await fetch('./promos.json?day='+today,{cache:'no-store'});
+     if(!response.ok)throw new Error('HTTP '+response.status);
+     const registry=await response.json();
+     const promo=(registry.promos||[]).find(item=>item.day===today&&item.active!==false);
+     if(!promo)throw new Error('No promo for '+today);
+     displayedPromo=promo;
+     promoCodeEl.textContent=promo.code;
+     promoCopyBtn.disabled=false;
+   }catch(error){
+     displayedPromo=null;
+     promoCodeEl.textContent='Промокод недоступен';
+     promoCopyBtn.disabled=true;
+     console.error('VOLTRA daily promo registry load failed',error);
+   }
+ }
+ refreshCode();setInterval(refreshCode,60000);
+ promoCopyBtn.addEventListener('click',async()=>{if(!displayedPromo)return;try{await navigator.clipboard.writeText(displayedPromo.code);promoCopyBtn.textContent=dict[lang].copied;setTimeout(()=>promoCopyBtn.textContent=dict[lang].copy,1400)}catch(e){}});
  const els=root.querySelectorAll('.reveal');if('IntersectionObserver' in window){const ob=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ob.unobserve(e.target)}}),{threshold:.12});els.forEach(el=>ob.observe(el))}else els.forEach(el=>el.classList.add('visible'));
 })();
 </script>
