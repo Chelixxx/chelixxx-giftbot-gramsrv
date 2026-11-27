@@ -43,9 +43,8 @@ RUN install -D -m 0644 /tmp/telegram_sticker_import.go /src/internal/app/files/t
 
 # VOLTRA promo redemption: authenticated MTProto self-chat command, shared
 # public registry validation, and atomic per-user Stars ledger credit.
-COPY patches/voltra-promo.patch /tmp/voltra-promo.patch
-RUN git apply --check /tmp/voltra-promo.patch \
-    && git apply /tmp/voltra-promo.patch
+COPY patches/insert_voltra_promo_handler.sh /tmp/insert_voltra_promo_handler.sh
+RUN sh /tmp/insert_voltra_promo_handler.sh
 
 COPY patches/voltra_promo_domain.go /tmp/voltra_promo_domain.go
 COPY patches/voltra_promo_service.go /tmp/voltra_promo_service.go
