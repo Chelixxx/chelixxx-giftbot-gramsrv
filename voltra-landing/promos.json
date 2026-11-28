@@ -1,1 +1,920 @@
-{"schema_version":1,"timezone":"Asia/Yekaterinburg","start_date":"2026-11-27","end_date":"2027-03-06","days":100,"policy":"Every listed promo code is enabled; this public file is a display registry, not a redemption ledger.","promos":[{"day":"2026-11-27","code":"VOLTRA-QUUS2YED","stars":4312,"active":true,"max_activations":0},{"day":"2026-11-28","code":"VOLTRA-NFRJGPR5","stars":1810,"active":true,"max_activations":0},{"day":"2026-11-29","code":"VOLTRA-QNGJSTKD","stars":5939,"active":true,"max_activations":0},{"day":"2026-11-30","code":"VOLTRA-J83TGEQY","stars":1530,"active":true,"max_activations":0},{"day":"2026-12-01","code":"VOLTRA-UFEKY5VL","stars":6961,"active":true,"max_activations":0},{"day":"2026-12-02","code":"VOLTRA-SPVVJWKP","stars":6575,"active":true,"max_activations":0},{"day":"2026-12-03","code":"VOLTRA-HBHPEJ4D","stars":3299,"active":true,"max_activations":0},{"day":"2026-12-04","code":"VOLTRA-XLZ3WDMH","stars":2260,"active":true,"max_activations":0},{"day":"2026-12-05","code":"VOLTRA-LWB7HWBF","stars":3018,"active":true,"max_activations":0},{"day":"2026-12-06","code":"VOLTRA-KTN3A5HF","stars":2460,"active":true,"max_activations":0},{"day":"2026-12-07","code":"VOLTRA-RF683838","stars":2896,"active":true,"max_activations":0},{"day":"2026-12-08","code":"VOLTRA-4H3GBZ68","stars":5763,"active":true,"max_activations":0},{"day":"2026-12-09","code":"VOLTRA-X24T6G2U","stars":3455,"active":true,"max_activations":0},{"day":"2026-12-10","code":"VOLTRA-QJHZSYDL","stars":3659,"active":true,"max_activations":0},{"day":"2026-12-11","code":"VOLTRA-928SXR9U","stars":5596,"active":true,"max_activations":0},{"day":"2026-12-12","code":"VOLTRA-XZTL4BQM","stars":2090,"active":true,"max_activations":0},{"day":"2026-12-13","code":"VOLTRA-YJ4AZH3Q","stars":7291,"active":true,"max_activations":0},{"day":"2026-12-14","code":"VOLTRA-QYK26682","stars":2068,"active":true,"max_activations":0},{"day":"2026-12-15","code":"VOLTRA-DFKZWQT6","stars":1659,"active":true,"max_activations":0},{"day":"2026-12-16","code":"VOLTRA-AQE3XKB8","stars":3344,"active":true,"max_activations":0},{"day":"2026-12-17","code":"VOLTRA-KE2UPP5J","stars":6135,"active":true,"max_activations":0},{"day":"2026-12-18","code":"VOLTRA-5RZ2XV5A","stars":2741,"active":true,"max_activations":0},{"day":"2026-12-19","code":"VOLTRA-93434RPC","stars":5609,"active":true,"max_activations":0},{"day":"2026-12-20","code":"VOLTRA-VSVWGEFE","stars":3170,"active":true,"max_activations":0},{"day":"2026-12-21","code":"VOLTRA-QX48LUEU","stars":6889,"active":true,"max_activations":0},{"day":"2026-12-22","code":"VOLTRA-UZ7CLLD3","stars":5275,"active":true,"max_activations":0},{"day":"2026-12-23","code":"VOLTRA-3MZG2LEM","stars":1833,"active":true,"max_activations":0},{"day":"2026-12-24","code":"VOLTRA-UDKA9QMS","stars":2781,"active":true,"max_activations":0},{"day":"2026-12-25","code":"VOLTRA-EETSR8UC","stars":7459,"active":true,"max_activations":0},{"day":"2026-12-26","code":"VOLTRA-T93MRTPP","stars":3702,"active":true,"max_activations":0},{"day":"2026-12-27","code":"VOLTRA-PF7M483A","stars":1804,"active":true,"max_activations":0},{"day":"2026-12-28","code":"VOLTRA-62RDX5N2","stars":3949,"active":true,"max_activations":0},{"day":"2026-12-29","code":"VOLTRA-EWJKW6F7","stars":5087,"active":true,"max_activations":0},{"day":"2026-12-30","code":"VOLTRA-3M5GG3BJ","stars":5544,"active":true,"max_activations":0},{"day":"2026-12-31","code":"VOLTRA-2G3S2RYX","stars":4089,"active":true,"max_activations":0},{"day":"2027-01-01","code":"VOLTRA-ZJFHJN83","stars":1725,"active":true,"max_activations":0},{"day":"2027-01-02","code":"VOLTRA-AYTH44RE","stars":5615,"active":true,"max_activations":0},{"day":"2027-01-03","code":"VOLTRA-9KBNZBFR","stars":3820,"active":true,"max_activations":0},{"day":"2027-01-04","code":"VOLTRA-TQ55AABQ","stars":5574,"active":true,"max_activations":0},{"day":"2027-01-05","code":"VOLTRA-XNLQ3ECE","stars":882,"active":true,"max_activations":0},{"day":"2027-01-06","code":"VOLTRA-TH4THR5E","stars":6992,"active":true,"max_activations":0},{"day":"2027-01-07","code":"VOLTRA-RWQ2KK2H","stars":5976,"active":true,"max_activations":0},{"day":"2027-01-08","code":"VOLTRA-R2MAA3VF","stars":6425,"active":true,"max_activations":0},{"day":"2027-01-09","code":"VOLTRA-NJ8JQT36","stars":3971,"active":true,"max_activations":0},{"day":"2027-01-10","code":"VOLTRA-RSR7W8DX","stars":6661,"active":true,"max_activations":0},{"day":"2027-01-11","code":"VOLTRA-KYH3VPR6","stars":3200,"active":true,"max_activations":0},{"day":"2027-01-12","code":"VOLTRA-WC4G6HLY","stars":1331,"active":true,"max_activations":0},{"day":"2027-01-13","code":"VOLTRA-JBHK6EK3","stars":1438,"active":true,"max_activations":0},{"day":"2027-01-14","code":"VOLTRA-SZFZNSZE","stars":971,"active":true,"max_activations":0},{"day":"2027-01-15","code":"VOLTRA-AGD2LC7Z","stars":4801,"active":true,"max_activations":0},{"day":"2027-01-16","code":"VOLTRA-4RAS3CHW","stars":6157,"active":true,"max_activations":0},{"day":"2027-01-17","code":"VOLTRA-TQL4NP3G","stars":2044,"active":true,"max_activations":0},{"day":"2027-01-18","code":"VOLTRA-BTWB2FLC","stars":2254,"active":true,"max_activations":0},{"day":"2027-01-19","code":"VOLTRA-U4Y6SGJS","stars":6537,"active":true,"max_activations":0},{"day":"2027-01-20","code":"VOLTRA-ADSNNLW7","stars":5391,"active":true,"max_activations":0},{"day":"2027-01-21","code":"VOLTRA-6P7N7RBR","stars":6630,"active":true,"max_activations":0},{"day":"2027-01-22","code":"VOLTRA-JVRTW3YC","stars":3223,"active":true,"max_activations":0},{"day":"2027-01-23","code":"VOLTRA-LPA2XMR5","stars":1945,"active":true,"max_activations":0},{"day":"2027-01-24","code":"VOLTRA-NPBQ972Z","stars":2485,"active":true,"max_activations":0},{"day":"2027-01-25","code":"VOLTRA-PZDK5UYM","stars":3283,"active":true,"max_activations":0},{"day":"2027-01-26","code":"VOLTRA-NXF54J82","stars":1560,"active":true,"max_activations":0},{"day":"2027-01-27","code":"VOLTRA-NXRT7DEJ","stars":7181,"active":true,"max_activations":0},{"day":"2027-01-28","code":"VOLTRA-6C3TWKBX","stars":6100,"active":true,"max_activations":0},{"day":"2027-01-29","code":"VOLTRA-NZABVE9S","stars":6607,"active":true,"max_activations":0},{"day":"2027-01-30","code":"VOLTRA-S3A67E9Y","stars":2766,"active":true,"max_activations":0},{"day":"2027-01-31","code":"VOLTRA-Z9NBU2U3","stars":992,"active":true,"max_activations":0},{"day":"2027-02-01","code":"VOLTRA-MGAZXZNT","stars":4301,"active":true,"max_activations":0},{"day":"2027-02-02","code":"VOLTRA-D2P32ZJA","stars":3893,"active":true,"max_activations":0},{"day":"2027-02-03","code":"VOLTRA-4KJPMKN4","stars":5197,"active":true,"max_activations":0},{"day":"2027-02-04","code":"VOLTRA-YD8DZL64","stars":2044,"active":true,"max_activations":0},{"day":"2027-02-05","code":"VOLTRA-XET9X2ZL","stars":2574,"active":true,"max_activations":0},{"day":"2027-02-06","code":"VOLTRA-72A732L8","stars":1064,"active":true,"max_activations":0},{"day":"2027-02-07","code":"VOLTRA-GD8RDNZF","stars":4865,"active":true,"max_activations":0},{"day":"2027-02-08","code":"VOLTRA-4NMTE7MD","stars":3203,"active":true,"max_activations":0},{"day":"2027-02-09","code":"VOLTRA-SSE35RPR","stars":4076,"active":true,"max_activations":0},{"day":"2027-02-10","code":"VOLTRA-CKFCQZRL","stars":5568,"active":true,"max_activations":0},{"day":"2027-02-11","code":"VOLTRA-Z636LXSV","stars":7466,"active":true,"max_activations":0},{"day":"2027-02-12","code":"VOLTRA-UPXHAQHV","stars":916,"active":true,"max_activations":0},{"day":"2027-02-13","code":"VOLTRA-MTZXU7VB","stars":3244,"active":true,"max_activations":0},{"day":"2027-02-14","code":"VOLTRA-KYQG6QNC","stars":4687,"active":true,"max_activations":0},{"day":"2027-02-15","code":"VOLTRA-ARDEN8JM","stars":6585,"active":true,"max_activations":0},{"day":"2027-02-16","code":"VOLTRA-BX6ZFPMQ","stars":3037,"active":true,"max_activations":0},{"day":"2027-02-17","code":"VOLTRA-MMV95BEW","stars":3065,"active":true,"max_activations":0},{"day":"2027-02-18","code":"VOLTRA-Z5QUVFYX","stars":2944,"active":true,"max_activations":0},{"day":"2027-02-19","code":"VOLTRA-HEKB26PC","stars":776,"active":true,"max_activations":0},{"day":"2027-02-20","code":"VOLTRA-EPMG5DSC","stars":3821,"active":true,"max_activations":0},{"day":"2027-02-21","code":"VOLTRA-VNQA9LTA","stars":2209,"active":true,"max_activations":0},{"day":"2027-02-22","code":"VOLTRA-P47LL78E","stars":4804,"active":true,"max_activations":0},{"day":"2027-02-23","code":"VOLTRA-64TBC44H","stars":3632,"active":true,"max_activations":0},{"day":"2027-02-24","code":"VOLTRA-DFLPD8B2","stars":6659,"active":true,"max_activations":0},{"day":"2027-02-25","code":"VOLTRA-FFUP68YP","stars":5808,"active":true,"max_activations":0},{"day":"2027-02-26","code":"VOLTRA-VV836NSX","stars":1696,"active":true,"max_activations":0},{"day":"2027-02-27","code":"VOLTRA-LRCUF38Q","stars":2031,"active":true,"max_activations":0},{"day":"2027-02-28","code":"VOLTRA-CKS7XU67","stars":1525,"active":true,"max_activations":0},{"day":"2027-03-01","code":"VOLTRA-76HHABBN","stars":4132,"active":true,"max_activations":0},{"day":"2027-03-02","code":"VOLTRA-3DTWS758","stars":6036,"active":true,"max_activations":0},{"day":"2027-03-03","code":"VOLTRA-LBJEPPFQ","stars":6387,"active":true,"max_activations":0},{"day":"2027-03-04","code":"VOLTRA-3ACQPJCK","stars":6175,"active":true,"max_activations":0},{"day":"2027-03-05","code":"VOLTRA-KZ2P54TY","stars":3279,"active":true,"max_activations":0},{"day":"2027-03-06","code":"VOLTRA-6X9RYZPK","stars":7183,"active":true,"max_activations":0}]}
+{
+  "schema_version": 1,
+  "timezone": "Asia/Yekaterinburg",
+  "start_date": "2026-11-27",
+  "end_date": "2027-04-05",
+  "days": 130,
+  "policy": "Every listed promo code is enabled; this public file is a display registry, not a redemption ledger.",
+  "promos": [
+    {
+      "day": "2026-11-27",
+      "code": "VOLTRA-QUUS2YED",
+      "stars": 4312,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-11-28",
+      "code": "VOLTRA-NFRJGPR5",
+      "stars": 1810,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-11-29",
+      "code": "VOLTRA-QNGJSTKD",
+      "stars": 5939,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-11-30",
+      "code": "VOLTRA-J83TGEQY",
+      "stars": 1530,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-01",
+      "code": "VOLTRA-UFEKY5VL",
+      "stars": 6961,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-02",
+      "code": "VOLTRA-SPVVJWKP",
+      "stars": 6575,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-03",
+      "code": "VOLTRA-HBHPEJ4D",
+      "stars": 3299,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-04",
+      "code": "VOLTRA-XLZ3WDMH",
+      "stars": 2260,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-05",
+      "code": "VOLTRA-LWB7HWBF",
+      "stars": 3018,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-06",
+      "code": "VOLTRA-KTN3A5HF",
+      "stars": 2460,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-07",
+      "code": "VOLTRA-RF683838",
+      "stars": 2896,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-08",
+      "code": "VOLTRA-4H3GBZ68",
+      "stars": 5763,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-09",
+      "code": "VOLTRA-X24T6G2U",
+      "stars": 3455,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-10",
+      "code": "VOLTRA-QJHZSYDL",
+      "stars": 3659,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-11",
+      "code": "VOLTRA-928SXR9U",
+      "stars": 5596,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-12",
+      "code": "VOLTRA-XZTL4BQM",
+      "stars": 2090,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-13",
+      "code": "VOLTRA-YJ4AZH3Q",
+      "stars": 7291,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-14",
+      "code": "VOLTRA-QYK26682",
+      "stars": 2068,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-15",
+      "code": "VOLTRA-DFKZWQT6",
+      "stars": 1659,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-16",
+      "code": "VOLTRA-AQE3XKB8",
+      "stars": 3344,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-17",
+      "code": "VOLTRA-KE2UPP5J",
+      "stars": 6135,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-18",
+      "code": "VOLTRA-5RZ2XV5A",
+      "stars": 2741,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-19",
+      "code": "VOLTRA-93434RPC",
+      "stars": 5609,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-20",
+      "code": "VOLTRA-VSVWGEFE",
+      "stars": 3170,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-21",
+      "code": "VOLTRA-QX48LUEU",
+      "stars": 6889,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-22",
+      "code": "VOLTRA-UZ7CLLD3",
+      "stars": 5275,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-23",
+      "code": "VOLTRA-3MZG2LEM",
+      "stars": 1833,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-24",
+      "code": "VOLTRA-UDKA9QMS",
+      "stars": 2781,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-25",
+      "code": "VOLTRA-EETSR8UC",
+      "stars": 7459,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-26",
+      "code": "VOLTRA-T93MRTPP",
+      "stars": 3702,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-27",
+      "code": "VOLTRA-PF7M483A",
+      "stars": 1804,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-28",
+      "code": "VOLTRA-62RDX5N2",
+      "stars": 3949,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-29",
+      "code": "VOLTRA-EWJKW6F7",
+      "stars": 5087,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-30",
+      "code": "VOLTRA-3M5GG3BJ",
+      "stars": 5544,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2026-12-31",
+      "code": "VOLTRA-2G3S2RYX",
+      "stars": 4089,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-01",
+      "code": "VOLTRA-ZJFHJN83",
+      "stars": 1725,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-02",
+      "code": "VOLTRA-AYTH44RE",
+      "stars": 5615,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-03",
+      "code": "VOLTRA-9KBNZBFR",
+      "stars": 3820,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-04",
+      "code": "VOLTRA-TQ55AABQ",
+      "stars": 5574,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-05",
+      "code": "VOLTRA-XNLQ3ECE",
+      "stars": 882,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-06",
+      "code": "VOLTRA-TH4THR5E",
+      "stars": 6992,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-07",
+      "code": "VOLTRA-RWQ2KK2H",
+      "stars": 5976,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-08",
+      "code": "VOLTRA-R2MAA3VF",
+      "stars": 6425,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-09",
+      "code": "VOLTRA-NJ8JQT36",
+      "stars": 3971,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-10",
+      "code": "VOLTRA-RSR7W8DX",
+      "stars": 6661,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-11",
+      "code": "VOLTRA-KYH3VPR6",
+      "stars": 3200,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-12",
+      "code": "VOLTRA-WC4G6HLY",
+      "stars": 1331,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-13",
+      "code": "VOLTRA-JBHK6EK3",
+      "stars": 1438,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-14",
+      "code": "VOLTRA-SZFZNSZE",
+      "stars": 971,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-15",
+      "code": "VOLTRA-AGD2LC7Z",
+      "stars": 4801,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-16",
+      "code": "VOLTRA-4RAS3CHW",
+      "stars": 6157,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-17",
+      "code": "VOLTRA-TQL4NP3G",
+      "stars": 2044,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-18",
+      "code": "VOLTRA-BTWB2FLC",
+      "stars": 2254,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-19",
+      "code": "VOLTRA-U4Y6SGJS",
+      "stars": 6537,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-20",
+      "code": "VOLTRA-ADSNNLW7",
+      "stars": 5391,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-21",
+      "code": "VOLTRA-6P7N7RBR",
+      "stars": 6630,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-22",
+      "code": "VOLTRA-JVRTW3YC",
+      "stars": 3223,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-23",
+      "code": "VOLTRA-LPA2XMR5",
+      "stars": 1945,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-24",
+      "code": "VOLTRA-NPBQ972Z",
+      "stars": 2485,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-25",
+      "code": "VOLTRA-PZDK5UYM",
+      "stars": 3283,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-26",
+      "code": "VOLTRA-NXF54J82",
+      "stars": 1560,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-27",
+      "code": "VOLTRA-NXRT7DEJ",
+      "stars": 7181,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-28",
+      "code": "VOLTRA-6C3TWKBX",
+      "stars": 6100,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-29",
+      "code": "VOLTRA-NZABVE9S",
+      "stars": 6607,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-30",
+      "code": "VOLTRA-S3A67E9Y",
+      "stars": 2766,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-01-31",
+      "code": "VOLTRA-Z9NBU2U3",
+      "stars": 992,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-01",
+      "code": "VOLTRA-MGAZXZNT",
+      "stars": 4301,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-02",
+      "code": "VOLTRA-D2P32ZJA",
+      "stars": 3893,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-03",
+      "code": "VOLTRA-4KJPMKN4",
+      "stars": 5197,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-04",
+      "code": "VOLTRA-YD8DZL64",
+      "stars": 2044,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-05",
+      "code": "VOLTRA-XET9X2ZL",
+      "stars": 2574,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-06",
+      "code": "VOLTRA-72A732L8",
+      "stars": 1064,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-07",
+      "code": "VOLTRA-GD8RDNZF",
+      "stars": 4865,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-08",
+      "code": "VOLTRA-4NMTE7MD",
+      "stars": 3203,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-09",
+      "code": "VOLTRA-SSE35RPR",
+      "stars": 4076,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-10",
+      "code": "VOLTRA-CKFCQZRL",
+      "stars": 5568,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-11",
+      "code": "VOLTRA-Z636LXSV",
+      "stars": 7466,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-12",
+      "code": "VOLTRA-UPXHAQHV",
+      "stars": 916,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-13",
+      "code": "VOLTRA-MTZXU7VB",
+      "stars": 3244,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-14",
+      "code": "VOLTRA-KYQG6QNC",
+      "stars": 4687,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-15",
+      "code": "VOLTRA-ARDEN8JM",
+      "stars": 6585,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-16",
+      "code": "VOLTRA-BX6ZFPMQ",
+      "stars": 3037,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-17",
+      "code": "VOLTRA-MMV95BEW",
+      "stars": 3065,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-18",
+      "code": "VOLTRA-Z5QUVFYX",
+      "stars": 2944,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-19",
+      "code": "VOLTRA-HEKB26PC",
+      "stars": 776,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-20",
+      "code": "VOLTRA-EPMG5DSC",
+      "stars": 3821,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-21",
+      "code": "VOLTRA-VNQA9LTA",
+      "stars": 2209,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-22",
+      "code": "VOLTRA-P47LL78E",
+      "stars": 4804,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-23",
+      "code": "VOLTRA-64TBC44H",
+      "stars": 3632,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-24",
+      "code": "VOLTRA-DFLPD8B2",
+      "stars": 6659,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-25",
+      "code": "VOLTRA-FFUP68YP",
+      "stars": 5808,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-26",
+      "code": "VOLTRA-VV836NSX",
+      "stars": 1696,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-27",
+      "code": "VOLTRA-LRCUF38Q",
+      "stars": 2031,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-02-28",
+      "code": "VOLTRA-CKS7XU67",
+      "stars": 1525,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-01",
+      "code": "VOLTRA-76HHABBN",
+      "stars": 4132,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-02",
+      "code": "VOLTRA-3DTWS758",
+      "stars": 6036,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-03",
+      "code": "VOLTRA-LBJEPPFQ",
+      "stars": 6387,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-04",
+      "code": "VOLTRA-3ACQPJCK",
+      "stars": 6175,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-05",
+      "code": "VOLTRA-KZ2P54TY",
+      "stars": 3279,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-06",
+      "code": "VOLTRA-6X9RYZPK",
+      "stars": 7183,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-07",
+      "code": "VOLTRA-MCD7N6Y3",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-08",
+      "code": "VOLTRA-56TSEWHC",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-09",
+      "code": "VOLTRA-3X5C9DSP",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-10",
+      "code": "VOLTRA-4XAG28TX",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-11",
+      "code": "VOLTRA-AN49CN62",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-12",
+      "code": "VOLTRA-V36U6H37",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-13",
+      "code": "VOLTRA-WHH95A7J",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-14",
+      "code": "VOLTRA-34W8V5EM",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-15",
+      "code": "VOLTRA-VCSP2Q93",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-16",
+      "code": "VOLTRA-KL6MZFEG",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-17",
+      "code": "VOLTRA-A4N3LYVS",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-18",
+      "code": "VOLTRA-C5AHDNRC",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-19",
+      "code": "VOLTRA-FBVTFJS2",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-20",
+      "code": "VOLTRA-NCZTMXSE",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-21",
+      "code": "VOLTRA-DHM2PRFL",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-22",
+      "code": "VOLTRA-NGLNW2LY",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-23",
+      "code": "VOLTRA-9Z9J3TZK",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-24",
+      "code": "VOLTRA-EA4AUCRG",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-25",
+      "code": "VOLTRA-CK2FJTKU",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-26",
+      "code": "VOLTRA-NN7Z7639",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-27",
+      "code": "VOLTRA-9HVCUFDH",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-28",
+      "code": "VOLTRA-GV69TU6D",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-29",
+      "code": "VOLTRA-V8AWU3WW",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-30",
+      "code": "VOLTRA-GH5JYX8L",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-03-31",
+      "code": "VOLTRA-RLUGDTU4",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-04-01",
+      "code": "VOLTRA-4DTALAYV",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-04-02",
+      "code": "VOLTRA-FM8EK7YF",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-04-03",
+      "code": "VOLTRA-5PTDLDC9",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-04-04",
+      "code": "VOLTRA-SUSXYXCT",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    },
+    {
+      "day": "2027-04-05",
+      "code": "VOLTRA-WW8L7636",
+      "stars": 10000,
+      "active": true,
+      "max_activations": 0
+    }
+  ]
+}
