@@ -14,7 +14,7 @@ import (
 // A replay with the same random_id returns the current balance without minting
 // again; a different request for an already claimed code is rejected.
 func (s *StarsStore) CreditPromo(ctx context.Context, userID int64, code string, randomID int64, amount int64, date int) (domain.StarsBalance, error) {
-	if userID <= 0 || code == "" || randomID == 0 || amount < 750 || amount > 7500 || date <= 0 {
+	if userID <= 0 || code == "" || randomID == 0 || amount < 750 || amount > 10000 || date <= 0 {
 		return domain.StarsBalance{}, domain.ErrStarsInvalidAmount
 	}
 

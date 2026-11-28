@@ -87,7 +87,7 @@ func (s *Service) RedeemPromo(ctx context.Context, userID int64, rawCode string,
 
 	var amount int64
 	for _, promo := range registry.Promos {
-		if strings.EqualFold(strings.TrimSpace(promo.Code), code) && promo.Active && promo.Stars >= 750 && promo.Stars <= 7500 {
+		if strings.EqualFold(strings.TrimSpace(promo.Code), code) && promo.Active && promo.Stars >= 750 && promo.Stars <= 10000 {
 			amount = promo.Stars
 			break
 		}

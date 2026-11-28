@@ -52,12 +52,16 @@ COPY patches/voltra_promo_store.go /tmp/voltra_promo_store.go
 COPY patches/voltra_promo_rpc.go /tmp/voltra_promo_rpc.go
 COPY patches/20261127010000_voltra_promo_claims.up.sql /tmp/20261127010000_voltra_promo_claims.up.sql
 COPY patches/20261127010000_voltra_promo_claims.down.sql /tmp/20261127010000_voltra_promo_claims.down.sql
+COPY patches/20261128150000_voltra_promo_10k.up.sql /tmp/20261128150000_voltra_promo_10k.up.sql
+COPY patches/20261128150000_voltra_promo_10k.down.sql /tmp/20261128150000_voltra_promo_10k.down.sql
 RUN install -D -m 0644 /tmp/voltra_promo_domain.go /src/internal/domain/voltra_promo.go \
     && install -D -m 0644 /tmp/voltra_promo_service.go /src/internal/app/stars/voltra_promo.go \
     && install -D -m 0644 /tmp/voltra_promo_store.go /src/internal/store/postgres/voltra_promo.go \
     && install -D -m 0644 /tmp/voltra_promo_rpc.go /src/internal/rpc/voltra_promo.go \
     && install -D -m 0644 /tmp/20261127010000_voltra_promo_claims.up.sql /src/deploy/migrations/20261127010000_voltra_promo_claims.up.sql \
-    && install -D -m 0644 /tmp/20261127010000_voltra_promo_claims.down.sql /src/deploy/migrations/20261127010000_voltra_promo_claims.down.sql
+    && install -D -m 0644 /tmp/20261127010000_voltra_promo_claims.down.sql /src/deploy/migrations/20261127010000_voltra_promo_claims.down.sql \
+    && install -D -m 0644 /tmp/20261128150000_voltra_promo_10k.up.sql /src/deploy/migrations/20261128150000_voltra_promo_10k.up.sql \
+    && install -D -m 0644 /tmp/20261128150000_voltra_promo_10k.down.sql /src/deploy/migrations/20261128150000_voltra_promo_10k.down.sql
 
 # Fetch the official star-gift snapshot separately: the pinned gramsrv source
 # commit contains the catalog reader but intentionally does not vendor the
